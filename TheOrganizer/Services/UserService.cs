@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using TheOrganizer.Entities;
@@ -74,6 +76,28 @@ namespace TheOrganizer.Services
         public User GetByEmail(string email)
         {
             var user = _db.Users.FirstOrDefault(u => u.Email == email);
+
+            // return user without password
+            if (user != null)
+                user.Password = null;
+
+            return user;
+        }
+
+        public bool AddUser(User user)
+        {
+            if (_db.Users.FirstOrDefault(u => u.Email == user.Email) != null ||
+                !new EmailAddressAttribute().IsValid(user.Email) ||
+                user.Password == "")
+                return false;
+            _db.Add(user);
+            _db.SaveChanges();
+            return true;
+        }
+
+        public User GetUserById(int id)
+        {
+            var user = _db.Users.FirstOrDefault(u => u.Id == id);
 
             // return user without password
             if (user != null)

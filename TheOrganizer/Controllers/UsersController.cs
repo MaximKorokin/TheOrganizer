@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TheOrganizer.Entities;
+using TheOrganizer.Model;
 using TheOrganizer.Services;
 
 namespace TheOrganizer.Controllers
@@ -23,7 +24,7 @@ namespace TheOrganizer.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]UserEntity userParam)
+        public IActionResult Authenticate([FromBody]User userParam)
         {
             var user = _userService.Authenticate(userParam.Email, userParam.Password);
 
@@ -32,7 +33,7 @@ namespace TheOrganizer.Controllers
 
             return Ok(user);
         }
-
+        
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -49,6 +50,25 @@ namespace TheOrganizer.Controllers
                 return NotFound();
 
             return Ok(user);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public IActionResult AddUser([FromBody] User userParam)
+        {
+            if (!_userService.AddUser(userParam))
+                return BadRequest("Something went wrong");
+            
+            var user = _userService.Authenticate(userParam.Email, userParam.Password);
+            return Ok(user);
+        }
+
+        [HttpGet("current")]
+        public IActionResult GetCurrentUser()
+        {
+            if (int.TryParse(User.Identity.Name, out int currentId))
+                return Ok(_userService.GetUserById(currentId));
+            return NotFound();
         }
     }
 }
