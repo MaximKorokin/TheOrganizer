@@ -97,13 +97,37 @@ namespace TheOrganizer.Services
 
         public User GetUserById(int id)
         {
-            var user = _db.Users.FirstOrDefault(u => u.Id == id);
+            var user = _db.Users.Find(id);
 
             // return user without password
             if (user != null)
                 user.Password = null;
 
             return user;
+        }
+
+        public bool ChangeUser(User newUser)
+        {
+            var user = _db.Users.Find(newUser.Id);
+            if (user == null || 
+                string.IsNullOrWhiteSpace(newUser.Email) ||
+                string.IsNullOrWhiteSpace(newUser.Name) ||
+                string.IsNullOrWhiteSpace(newUser.Password) ||
+                !new EmailAddressAttribute().IsValid(user.Email))
+                return false;
+            _db.Entry(user).CurrentValues.SetValues(newUser);
+            _db.SaveChanges();
+            return true;
+        }
+
+        public bool DeleteUser(int id)
+        {
+            var user = _db.Users.Find(id);
+            if (user == null)
+                return false;
+            _db.Users.Remove(user);
+            _db.SaveChanges();
+            return true;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace TheOrganizer.Controllers
 
             return Ok(user);
         }
-        
+
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -45,7 +45,7 @@ namespace TheOrganizer.Controllers
         public IActionResult GetUser([FromQuery(Name = "email")] string email)
         {
             var user = _userService.GetByEmail(email);
-            
+
             if (user == null)
                 return NotFound();
 
@@ -58,7 +58,7 @@ namespace TheOrganizer.Controllers
         {
             if (!_userService.AddUser(userParam))
                 return BadRequest("Something went wrong");
-            
+
             var user = _userService.Authenticate(userParam.Email, userParam.Password);
             return Ok(user);
         }
@@ -68,6 +68,29 @@ namespace TheOrganizer.Controllers
         {
             if (int.TryParse(User.Identity.Name, out int currentId))
                 return Ok(_userService.GetUserById(currentId));
+            return NotFound();
+        }
+
+        [HttpPut("current/change")]
+        public IActionResult ChangeCurrentUser(User user)
+        {
+            int id;
+            if (!int.TryParse(User.Identity.Name, out id))
+                return NotFound();
+            user.Id = id;
+            if (_userService.ChangeUser(user))
+                return Ok(user);
+            return BadRequest();
+        }
+
+        [HttpDelete("current/delete")]
+        public IActionResult DeleteCurrentUser()
+        {
+            int id;
+            if (!int.TryParse(User.Identity.Name, out id))
+                return BadRequest();
+            if (_userService.DeleteUser(id))
+                return Ok();
             return NotFound();
         }
     }
