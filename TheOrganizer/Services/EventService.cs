@@ -26,7 +26,9 @@ namespace TheOrganizer.Services
 
         public bool EditEvent(Event e)
         {
-            if (_db.Events.Find(e.Id) == null ||
+            var oldEvent = _db.Events.Find(e.Id);
+            if (oldEvent == null ||
+                oldEvent.OwnerId != e.OwnerId ||
                 !CheckEventValidity(e))
                 return false;
             _db.Add(e);

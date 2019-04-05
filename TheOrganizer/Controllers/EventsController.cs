@@ -25,8 +25,8 @@ namespace TheOrganizer.Controllers
         [HttpPost("add")]
         public IActionResult AddEvent([FromBody] Event e)
         {
-            if (e.OwnerId.ToString() != User.Identity.Name)
-                return Unauthorized("No permission to add events for other users");
+            int.TryParse(User.Identity.Name, out int userId);
+            e.OwnerId = userId;
             if (_eventService.AddEvent(e))
                 return Ok();
             return BadRequest("There is something wrong with event info");
@@ -35,8 +35,8 @@ namespace TheOrganizer.Controllers
         [HttpPut("edit")]
         public IActionResult EditEvent([FromBody] Event e)
         {
-            if (e.OwnerId.ToString() != User.Identity.Name)
-                return Unauthorized("No permission to edit events of other users");
+            int.TryParse(User.Identity.Name, out int userId);
+            e.OwnerId = userId;
             if (_eventService.EditEvent(e))
                 return Ok();
             return BadRequest("There is something wrong with event info");
