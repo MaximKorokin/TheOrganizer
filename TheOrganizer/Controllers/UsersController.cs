@@ -72,7 +72,7 @@ namespace TheOrganizer.Controllers
         }
 
         [HttpPut("current/change")]
-        public IActionResult ChangeCurrentUser(User user)
+        public IActionResult ChangeCurrentUser([FromBody] User user)
         {
             int id;
             if (!int.TryParse(User.Identity.Name, out id))
