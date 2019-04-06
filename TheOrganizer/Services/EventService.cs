@@ -31,7 +31,7 @@ namespace TheOrganizer.Services
                 oldEvent.OwnerId != e.OwnerId ||
                 !CheckEventValidity(e))
                 return false;
-            _db.Add(e);
+            _db.Entry(oldEvent).CurrentValues.SetValues(e);
             _db.SaveChanges();
             return true;
         }
