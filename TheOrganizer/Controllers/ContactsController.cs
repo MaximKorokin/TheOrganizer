@@ -14,10 +14,10 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class ContactsController : Controller
     {
-        private IContactServise _contactServise;
-        public ContactsController(IContactServise contactServise)
+        private IContactService _contactService;
+        public ContactsController(IContactService contactServise)
         {
-            _contactServise = contactServise;
+            _contactService = contactServise;
         }
 
         [HttpPost("add")]
@@ -25,7 +25,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             contact.OwnerId = userId;
-            if (_contactServise.AddContact(contact))
+            if (_contactService.AddContact(contact))
                 return Ok();
             return BadRequest("There is something wrong with contact info");
         }
@@ -35,7 +35,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             contact.OwnerId = userId;
-            if (_contactServise.EditContact(contact))
+            if (_contactService.EditContact(contact))
                 return Ok();
             return BadRequest("There is something wrong with contact info");
         }
@@ -44,7 +44,7 @@ namespace TheOrganizer.Controllers
         public IActionResult RemoveContact([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            if (_contactServise.RemoveContact(id, userId))
+            if (_contactService.RemoveContact(id, userId))
                 return Ok();
             return StatusCode(404);
         }
@@ -53,7 +53,7 @@ namespace TheOrganizer.Controllers
         public IActionResult GetContacts()
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_contactServise.GetContacts(userId));
+            return Ok(_contactService.GetContacts(userId));
         }
     }
 }
