@@ -15,9 +15,9 @@ namespace TheOrganizer.Controllers
     public class ContactsController : Controller
     {
         private IContactService _contactService;
-        public ContactsController(IContactService contactServise)
+        public ContactsController(IContactService contactService)
         {
-            _contactService = contactServise;
+            _contactService = contactService;
         }
 
         [HttpPost("add")]
