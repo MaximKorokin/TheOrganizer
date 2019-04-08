@@ -31,7 +31,7 @@ namespace TheOrganizer.Controllers
         }
 
         [HttpPut("edit")]
-        public IActionResult EditEvent([FromBody] Contact contact)
+        public IActionResult EditContact([FromBody] Contact contact)
         {
             int.TryParse(User.Identity.Name, out int userId);
             contact.OwnerId = userId;
@@ -41,7 +41,7 @@ namespace TheOrganizer.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult RemoveEvent([FromRoute] int id)
+        public IActionResult RemoveContact([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_contactServise.RemoveContact(id, userId))
@@ -50,7 +50,7 @@ namespace TheOrganizer.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEvents()
+        public IActionResult GetContacts()
         {
             int.TryParse(User.Identity.Name, out int userId);
             return Ok(_contactServise.GetContacts(userId));
