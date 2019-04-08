@@ -6,11 +6,11 @@ using TheOrganizer.Model;
 
 namespace TheOrganizer.Services
 {
-    public class ContactServise : IContactService
+    public class ContactService : IContactService
     {
         private readonly TheOrganizerDBContext _db;
 
-        public ContactServise(TheOrganizerDBContext db)
+        public ContactService(TheOrganizerDBContext db)
         {
             _db = db;
         }
