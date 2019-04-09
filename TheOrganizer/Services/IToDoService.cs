@@ -17,7 +17,5 @@ namespace TheOrganizer.Services
         IEnumerable<ToDo> GetToDos(int OwnerId);
 
         ToDo GetToDo(int ToDoId, int OwnerId);
-
-        ToDo IsToDoDone(int ToDoId, int OwnerId);
     }
 }

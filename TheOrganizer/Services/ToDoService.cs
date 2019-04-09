@@ -49,11 +49,6 @@ namespace TheOrganizer.Services
             return _db.Tasks.Where(t => t.OwnerId == OwnerId);
         }
 
-        public ToDo IsToDoDone(int ToDoId, int OwnerId)
-        {
-            return _db.Tasks.Where(t => t.Id == ToDoId && t.OwnerId == OwnerId).FirstOrDefault();            
-        }
-
         public bool RemoveToDo(int ToDoId, int OwnerId)
         {
             var task = _db.Tasks.Find(ToDoId);

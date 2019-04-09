@@ -73,7 +73,7 @@ namespace TheOrganizer.Controllers
         public IActionResult IsToDoDone([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var res = _toDoService.IsToDoDone(id, userId);
+            var res = _toDoService.GetToDo(id, userId);
             if (res != null)
             {
                 return Ok(res.IsDone);
