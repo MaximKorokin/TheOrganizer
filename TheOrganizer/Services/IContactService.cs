@@ -6,7 +6,7 @@ using TheOrganizer.Model;
 
 namespace TheOrganizer.Services
 {
-    public interface IContactServise
+    public interface IContactService
     {
         bool AddContact(Contact contact);
 
