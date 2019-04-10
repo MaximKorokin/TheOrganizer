@@ -26,8 +26,7 @@ namespace TheOrganizer.Controllers
         public IActionResult AddEvent([FromBody] Event e)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            e.OwnerId = userId;
-            if (_eventService.AddEvent(e))
+            if (_eventService.AddEvent(e, userId))
                 return Ok();
             return BadRequest("There is something wrong with event info");
         }
@@ -36,8 +35,7 @@ namespace TheOrganizer.Controllers
         public IActionResult EditEvent([FromBody] Event e)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            e.OwnerId = userId;
-            if (_eventService.EditEvent(e))
+            if (_eventService.EditEvent(e, userId))
                 return Ok();
             return BadRequest("There is something wrong with event info");
         }
@@ -51,19 +49,19 @@ namespace TheOrganizer.Controllers
             return NotFound();
         }
 
-        [HttpGet("get")]
-        public IActionResult GetEvents()
+        [HttpGet("getAll/{calendarId}")]
+        public IActionResult GetEvents([FromRoute] int calendarId)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var events = _eventService.GetEvents(userId);
+            var events = _eventService.GetEvents(calendarId, userId);
             return Ok(events);
         }
         
-        [HttpGet("get/{id}")]
-        public IActionResult GetEvent([FromRoute] int id)
+        [HttpGet("get/{eventId}")]
+        public IActionResult GetEvent([FromRoute] int eventId)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var e = _eventService.GetEvent(id, userId);
+            var e = _eventService.GetEvent(eventId, userId);
             if (e != null)
                 return Ok(e);
             return NotFound();

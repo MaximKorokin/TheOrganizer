@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 
 namespace TheOrganizer.Model
 {
-    public class Note
+    public class Notebook
     {
         public int Id { get; set; }
-        public int NotebookId { get; set; }
         public string Title { get; set; }
-        public string Text { get; set; }
-        public DateTime DateCreated { get; set; }
+        public int OwnerId { get; set; }
 
-        public Notebook Notebook { get; set; }
+        public User User { get; set; }
+        public List<Note> Notes { get; set; }
     }
 }

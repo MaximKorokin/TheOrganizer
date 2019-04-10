@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace TheOrganizer.Model
 {
-    public class Task
+    public class Calendar
     {
         public int Id { get; set; }
+        public string Title { get; set; }
         public int OwnerId { get; set; }
-        public string Text { get; set; }
-        public bool IsDone { get; set; }
 
         public User User { get; set; }
+        public List<Event> Events { get; set; }
     }
 }
