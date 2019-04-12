@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ToDo = TheOrganizer.Model.Task;
+using TheOrganizer.Model;
 
 namespace TheOrganizer.Services
 {
-    public interface IToDoService
+    public interface ITodoService
     {
-        bool AddToDo(ToDo task);
+        bool AddTodo(Todo task);
 
-        bool EditToDo(ToDo task);
+        bool EditTodo(Todo task);
 
-        bool RemoveToDo(int ToDoId, int OwnerId);
+        bool RemoveTodo(int ToDoId, int OwnerId);
 
-        IEnumerable<ToDo> GetToDos(int OwnerId);
+        IEnumerable<Todo> GetTodos(int OwnerId);
 
-        ToDo GetToDo(int ToDoId, int OwnerId);
+        Todo GetTodo(int ToDoId, int OwnerId);
     }
 }

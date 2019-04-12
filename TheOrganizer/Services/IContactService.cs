@@ -12,7 +12,7 @@ namespace TheOrganizer.Services
 
         bool EditContact(Contact contact);
 
-        bool RemoveContact(int comtactId, int ownerId);
+        bool RemoveContact(int contactId, int ownerId);
 
         IEnumerable<Contact> GetContacts(int ownerId);
     }

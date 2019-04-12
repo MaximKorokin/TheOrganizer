@@ -3,59 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TheOrganizer.Model;
-using ToDo = TheOrganizer.Model.Task;
 
 namespace TheOrganizer.Services
 {
-    public class ToDoService : IToDoService
+    public class TodoService : ITodoService
     {
         private readonly TheOrganizerDBContext _db;
 
-        public ToDoService(TheOrganizerDBContext db)
+        public TodoService(TheOrganizerDBContext db)
         {
             _db = db;
         }
-        public bool AddToDo(ToDo task)
+        public bool AddTodo(Todo task)
         {
-            if (task != null)
-            {
-                _db.Tasks.Add(task);
-                _db.SaveChanges();
-                return true;
-            }
-            else return false;
+            //if (task != null)
+            //{
+            //    _db.Todos.Add(task);
+            //    _db.SaveChanges();
+            //    return true;
+            //}
+            return false;
         }
 
-        public bool EditToDo(ToDo task)
+        public bool EditTodo(Todo task)
         {
-            ToDo OldTask = _db.Tasks.Find(task.Id);
+            //Todo OldTask = _db.Todos.Find(task.Id);
 
-            if (OldTask != null && OldTask.OwnerId == task.OwnerId)
-            {
-                _db.Entry(OldTask).CurrentValues.SetValues(task);
-                _db.SaveChanges();
-                return true;
-            }
-            else return false;
+            //if (OldTask != null && OldTask.OwnerId == task.OwnerId)
+            //{
+            //    _db.Entry(OldTask).CurrentValues.SetValues(task);
+            //    _db.SaveChanges();
+            //    return true;
+            //}
+            return false;
         }
 
-        public ToDo GetToDo(int ToDoId, int OwnerId)
+        public Todo GetTodo(int ToDoId, int OwnerId)
         {
-            return _db.Tasks.Where(t => t.Id == ToDoId && t.OwnerId == OwnerId).FirstOrDefault();
+            return null; //_db.Todos.Where(t => t.Id == ToDoId && t.OwnerId == OwnerId).FirstOrDefault();
         }
 
-        public IEnumerable<ToDo> GetToDos(int OwnerId)
+        public IEnumerable<Todo> GetTodos(int OwnerId)
         {
-            return _db.Tasks.Where(t => t.OwnerId == OwnerId);
+            return null; //_db.Todos.Where(t => t.OwnerId == OwnerId);
         }
 
-        public bool RemoveToDo(int ToDoId, int OwnerId)
+        public bool RemoveTodo(int ToDoId, int OwnerId)
         {
-            var task = _db.Tasks.Find(ToDoId);
-            if (task == null || task.OwnerId != OwnerId)
-                return false;
-            _db.Tasks.Remove(task);
-            _db.SaveChanges();
+            //var task = _db.Todos.Find(ToDoId);
+            //if (task == null || task.OwnerId != OwnerId)
+            //    return false;
+            //_db.Todos.Remove(task);
+            //_db.SaveChanges();
             return true;
         }
     }

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
-using ToDo = TheOrganizer.Model.Task;
 
 namespace TheOrganizer.Controllers
 {
@@ -16,29 +15,29 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class ToDoController : ControllerBase
     {
-        private IToDoService _toDoService;
-        public ToDoController(IToDoService toDoService)
+        private ITodoService _toDoService;
+        public ToDoController(ITodoService toDoService)
         {
             _toDoService = toDoService;
         }
 
         [HttpPost("add")]
-        public IActionResult AddToDo([FromBody] ToDo task)
+        public IActionResult AddToDo([FromBody] Todo task)
         {
-            int.TryParse(User.Identity.Name, out int userId);
-            task.OwnerId = userId;
-            if (_toDoService.AddToDo(task))
-                return Ok();
+            //int.TryParse(User.Identity.Name, out int userId);
+            //task.OwnerId = userId;
+            //if (_toDoService.AddTodo(task))
+            //    return Ok();
             return BadRequest("There is something wrong with ToDo info");
         }
 
         [HttpPut("edit")]
-        public IActionResult EditToDo([FromBody] ToDo task)
+        public IActionResult EditToDo([FromBody] Todo task)
         {
-            int.TryParse(User.Identity.Name, out int userId);
-            task.OwnerId = userId;
-            if (_toDoService.EditToDo(task))
-                return Ok();
+            //int.TryParse(User.Identity.Name, out int userId);
+            //task.OwnerId = userId;
+            //if (_toDoService.EditTodo(task))
+            //    return Ok();
             return BadRequest("There is something wrong with ToDo info");
         }
 
@@ -46,7 +45,7 @@ namespace TheOrganizer.Controllers
         public IActionResult DeleteToDo([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            if (_toDoService.RemoveToDo(id, userId))
+            if (_toDoService.RemoveTodo(id, userId))
                 return Ok();
             return NotFound();
         }
@@ -55,7 +54,7 @@ namespace TheOrganizer.Controllers
         public IActionResult GetToDos()
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var toDos = _toDoService.GetToDos(userId);
+            var toDos = _toDoService.GetTodos(userId);
             return Ok(toDos);
         }
 
@@ -63,7 +62,7 @@ namespace TheOrganizer.Controllers
         public IActionResult GetToDo([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var res = _toDoService.GetToDo(id, userId);
+            var res = _toDoService.GetTodo(id, userId);
             if (res != null)
                 return Ok(res);
             return NotFound();
@@ -73,7 +72,7 @@ namespace TheOrganizer.Controllers
         public IActionResult IsToDoDone([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var res = _toDoService.GetToDo(id, userId);
+            var res = _toDoService.GetTodo(id, userId);
             if (res != null)
             {
                 return Ok(res.IsDone);
