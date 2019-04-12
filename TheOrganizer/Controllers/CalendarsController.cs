@@ -12,11 +12,11 @@ namespace TheOrganizer.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class CalendarController : Controller
+    public class CalendarsController : Controller
     {
         private ICalendarService _eventService;
 
-        public CalendarController(ICalendarService eventService)
+        public CalendarsController(ICalendarService eventService)
         {
             _eventService = eventService;
         }

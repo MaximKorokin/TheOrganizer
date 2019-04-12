@@ -13,10 +13,10 @@ namespace TheOrganizer.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ToDoController : ControllerBase
+    public class TodosController : ControllerBase
     {
         private ITodoService _toDoService;
-        public ToDoController(ITodoService toDoService)
+        public TodosController(ITodoService toDoService)
         {
             _toDoService = toDoService;
         }
