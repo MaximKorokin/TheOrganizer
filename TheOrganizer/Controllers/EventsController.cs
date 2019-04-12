@@ -54,6 +54,8 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var events = _eventService.GetEvents(calendarId, userId);
+            foreach (var e in events)
+                ClearEvent(e);
             return Ok(events);
         }
         
@@ -63,8 +65,17 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             var e = _eventService.GetEvent(eventId, userId);
             if (e != null)
+            {
+                ClearEvent(e);
                 return Ok(e);
+            }
             return NotFound();
+        }
+
+        private Event ClearEvent(Event e)
+        {
+            e.Calendar = null;
+            return e;
         }
     }
 }

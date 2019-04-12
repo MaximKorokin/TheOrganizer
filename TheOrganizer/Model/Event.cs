@@ -14,7 +14,7 @@ namespace TheOrganizer.Model
         public string Tag { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-
+        
         public Calendar Calendar { get; set; }
     }
 }
