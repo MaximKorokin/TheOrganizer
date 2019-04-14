@@ -8,7 +8,7 @@ namespace TheOrganizer.Services
 {
     public interface ICalendarService
     {
-        bool AddCalendar(Calendar calendar);
+        Calendar AddCalendar(Calendar calendar);
 
         bool EditCalendar(Calendar calendar);
 

@@ -15,16 +15,15 @@ namespace TheOrganizer.Services
             _db = db;
         }
 
-        public bool AddCalendar(Calendar calendar)
+        public Calendar AddCalendar(Calendar calendar)
         {
-
             if (calendar != null)
             {
                 _db.Calendars.Add(calendar);
                 _db.SaveChanges();
-                return true;
+                return calendar;
             }
-            else return false;
+            return null;
         }
 
         public bool EditCalendar(Calendar calendar)
@@ -37,7 +36,7 @@ namespace TheOrganizer.Services
                 _db.SaveChanges();
                 return true;
             }
-            else return false;
+            return false;
         }
 
         public Calendar GetCalendar(int calendarId, int ownerId)
@@ -63,7 +62,7 @@ namespace TheOrganizer.Services
                 _db.SaveChanges();
                 return true;
             }
-            else return false;
+            return false;
         }
     }
 }

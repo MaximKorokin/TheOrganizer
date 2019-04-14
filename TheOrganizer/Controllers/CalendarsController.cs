@@ -26,8 +26,8 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             calendar.OwnerId = userId;
-            if (_eventService.AddCalendar(calendar))
-                return Ok();
+            if (_eventService.AddCalendar(calendar) != null)
+                return Ok(calendar);
             return BadRequest("There is something wrong with calendar info");
         }
 
