@@ -72,6 +72,7 @@ namespace TheOrganizer
             services.AddScoped<IContactService, ContactService>();
             services.AddScoped<ITodoService, TodoService>();
             services.AddScoped<ITodoListService, TodoListService>();
+            services.AddScoped<INoteService, NoteService>();
 
             services.AddScoped<ICalendarService, CalendarService>();
         }
