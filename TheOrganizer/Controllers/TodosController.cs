@@ -15,69 +15,69 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class TodosController : ControllerBase
     {
-        private ITodoService _toDoService;
-        public TodosController(ITodoService toDoService)
+        private ITodoService _todoService;
+        public TodosController(ITodoService todoService)
         {
-            _toDoService = toDoService;
+            _todoService = todoService;
         }
 
         [HttpPost("add")]
-        public IActionResult AddToDo([FromBody] Todo task)
+        public IActionResult AddTodo([FromBody] Todo todo)
         {
-            //int.TryParse(User.Identity.Name, out int userId);
-            //task.OwnerId = userId;
-            //if (_toDoService.AddTodo(task))
-            //    return Ok();
+            int.TryParse(User.Identity.Name, out int userId);
+            if (_todoService.AddTodo(todo, userId))
+                return Ok();
             return BadRequest("There is something wrong with ToDo info");
         }
 
         [HttpPut("edit")]
-        public IActionResult EditToDo([FromBody] Todo task)
+        public IActionResult EditTodo([FromBody] Todo todo)
         {
-            //int.TryParse(User.Identity.Name, out int userId);
-            //task.OwnerId = userId;
-            //if (_toDoService.EditTodo(task))
-            //    return Ok();
-            return BadRequest("There is something wrong with ToDo info");
+            int.TryParse(User.Identity.Name, out int userId);
+            if (_todoService.EditTodo(todo, userId))
+                return Ok();
+            return BadRequest("There is something wrong with Todo info");
         }
 
         [HttpDelete("delete/{id}")]
         public IActionResult DeleteToDo([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            if (_toDoService.RemoveTodo(id, userId))
+            if (_todoService.RemoveTodo(id, userId))
                 return Ok();
             return NotFound();
         }
 
-        [HttpGet]
-        public IActionResult GetToDos()
+        [HttpGet("getAll/{todoListId}")]
+        public IActionResult GetTodos([FromRoute] int todoListId)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var toDos = _toDoService.GetTodos(userId);
-            return Ok(toDos);
+            var todos = _todoService.GetTodos(userId, todoListId);
+            if (todos != null && todos.Count() > 0)
+            {
+                return Ok(todos);
+            }
+            return StatusCode(404);
         }
 
         [HttpGet("get/{id}")]
-        public IActionResult GetToDo([FromRoute] int id)
+        public IActionResult GetTodo([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var res = _toDoService.GetTodo(id, userId);
+            var res = _todoService.GetTodo(id, userId);
             if (res != null)
                 return Ok(res);
             return NotFound();
         }
 
         [HttpGet("check/{id}")]
-        public IActionResult IsToDoDone([FromRoute] int id)
+        public IActionResult IsTodoDone([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var res = _toDoService.GetTodo(id, userId);
+            var res = _todoService.GetTodo(id, userId);
             if (res != null)
-            {
                 return Ok(res.IsDone);
-            }
-            else return StatusCode(404);
+            return NotFound();
         }
     }
 }

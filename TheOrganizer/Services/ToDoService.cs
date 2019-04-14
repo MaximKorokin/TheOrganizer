@@ -14,47 +14,58 @@ namespace TheOrganizer.Services
         {
             _db = db;
         }
-        public bool AddTodo(Todo task)
+        public bool AddTodo(Todo todo, int ownerId)
         {
-            //if (task != null)
-            //{
-            //    _db.Todos.Add(task);
-            //    _db.SaveChanges();
-            //    return true;
-            //}
+            var currentTodoList = _db.TodoLists.Find(todo.TodoListId);
+
+            if (todo != null && CheckTodoListAccess(currentTodoList.Id, ownerId))
+            {
+                _db.Todos.Add(todo);
+                _db.SaveChanges();
+                return true;
+            }
             return false;
         }
 
-        public bool EditTodo(Todo task)
+        public bool EditTodo(Todo todo, int ownerId)
         {
-            //Todo OldTask = _db.Todos.Find(task.Id);
+            Todo OldTodo = _db.Todos.Find(todo.Id);
+            var currentTodoList = _db.TodoLists.Find(todo.TodoListId);
 
-            //if (OldTask != null && OldTask.OwnerId == task.OwnerId)
-            //{
-            //    _db.Entry(OldTask).CurrentValues.SetValues(task);
-            //    _db.SaveChanges();
-            //    return true;
-            //}
+            if (OldTodo != null && CheckTodoListAccess(currentTodoList.Id, ownerId))
+            {
+                _db.Entry(OldTodo).CurrentValues.SetValues(todo);
+                _db.SaveChanges();
+                return true;
+            }
             return false;
         }
 
-        public Todo GetTodo(int ToDoId, int OwnerId)
+        public Todo GetTodo(int todoId, int ownerId)
         {
-            return null; //_db.Todos.Where(t => t.Id == ToDoId && t.OwnerId == OwnerId).FirstOrDefault();
+            return _db.Todos.Where(t => t.Id == todoId && t.TodoList.OwnerId == ownerId).FirstOrDefault();
         }
 
-        public IEnumerable<Todo> GetTodos(int OwnerId)
+        public IEnumerable<Todo> GetTodos(int ownerId, int todoListId)
         {
-            return null; //_db.Todos.Where(t => t.OwnerId == OwnerId);
+            return _db.Todos.Where(t => t.TodoList.OwnerId == ownerId && t.TodoListId == todoListId);
         }
 
-        public bool RemoveTodo(int ToDoId, int OwnerId)
+        public bool RemoveTodo(int todoId, int ownerId)
         {
-            //var task = _db.Todos.Find(ToDoId);
-            //if (task == null || task.OwnerId != OwnerId)
-            //    return false;
-            //_db.Todos.Remove(task);
-            //_db.SaveChanges();
+            var currentToDo = _db.Todos.Find(todoId);
+            if (currentToDo == null || CheckTodoListAccess(currentToDo.TodoListId, ownerId))
+                return false;
+            _db.Todos.Remove(currentToDo);
+            _db.SaveChanges();
+            return true;
+        }
+
+        private bool CheckTodoListAccess(int todoListId, int ownerId)
+        {
+            var todoList = _db.TodoLists.Find(todoListId);
+            if (todoList == null || todoList.OwnerId != ownerId)
+                return false;
             return true;
         }
     }

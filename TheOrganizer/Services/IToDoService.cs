@@ -8,14 +8,14 @@ namespace TheOrganizer.Services
 {
     public interface ITodoService
     {
-        bool AddTodo(Todo task);
+        bool AddTodo(Todo toDo, int ownerId);
 
-        bool EditTodo(Todo task);
+        bool EditTodo(Todo toDo, int ownerId);
 
-        bool RemoveTodo(int ToDoId, int OwnerId);
+        bool RemoveTodo(int toDoId, int ownerId);
 
-        IEnumerable<Todo> GetTodos(int OwnerId);
+        IEnumerable<Todo> GetTodos(int ownerId, int toDoListId);
 
-        Todo GetTodo(int ToDoId, int OwnerId);
+        Todo GetTodo(int toDoId, int ownerId);
     }
 }
