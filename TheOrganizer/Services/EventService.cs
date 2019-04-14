@@ -15,21 +15,21 @@ namespace TheOrganizer.Services
             _db = db;
         }
 
-        public bool AddEvent(Event e)
+        public bool AddEvent(Event e, int userId)
         {
-            if (!CheckEventValidity(e))
+            if (!CheckEventValidity(e) || !CheckCalendarAccess(e.CalendarId, userId))
                 return false;
             _db.Add(e);
             _db.SaveChanges();
             return true;
         }
 
-        public bool EditEvent(Event e)
+        public bool EditEvent(Event e, int userId)
         {
             var oldEvent = _db.Events.Find(e.Id);
             if (oldEvent == null ||
-                oldEvent.OwnerId != e.OwnerId ||
-                !CheckEventValidity(e))
+                !CheckEventValidity(e) ||
+                !CheckCalendarAccess(e.CalendarId, userId))
                 return false;
             _db.Entry(oldEvent).CurrentValues.SetValues(e);
             _db.SaveChanges();
@@ -39,20 +39,22 @@ namespace TheOrganizer.Services
         public Event GetEvent(int id, int userId)
         {
             var e = _db.Events.Find(id);
-            if (e != null && e.OwnerId == userId)
+            if (e != null && CheckCalendarAccess(e.CalendarId, userId))
                 return e;
             return null;
         }
 
-        public IEnumerable<Event> GetEvents(int userId)
+        public IEnumerable<Event> GetEvents(int calendarId, int userId)
         {
-            return _db.Events.Where(e => e.OwnerId == userId);
+            if (!CheckCalendarAccess(calendarId, userId))
+                return null;
+            return _db.Events.Where(e => e.CalendarId == calendarId);
         }
 
         public bool RemoveEvent(int id, int userId)
         {
             var e = _db.Events.Find(id);
-            if (e == null || e.OwnerId != userId)
+            if (e == null || !CheckCalendarAccess(e.CalendarId, userId))
                 return false;
             _db.Events.Remove(e);
             _db.SaveChanges();
@@ -61,9 +63,15 @@ namespace TheOrganizer.Services
 
         private bool CheckEventValidity(Event e)
         {
-            return !(//_db.Users.Find(e.OwnerId) == null ||
-                     e.StartTime > e.EndTime ||
-                     string.IsNullOrWhiteSpace(e.Title));
+            return !(e.StartTime > e.EndTime || string.IsNullOrWhiteSpace(e.Title));
+        }
+
+        private bool CheckCalendarAccess(int calendarId, int userId)
+        {
+            var calendar = _db.Calendars.Find(calendarId);
+            if (calendar == null || calendar.OwnerId != userId)
+                return false;
+            return true;
         }
     }
 }

@@ -12,9 +12,9 @@ namespace TheOrganizer.Model
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public List<Event> Events { get; set; }
-        public List<Task> Tasks { get; set; }
+        public List<Calendar> Calendars { get; set; }
+        public List<TodoList> TodoLists { get; set; }
         public List<Contact> Contacts { get; set; }
-        public List<Note> Notes { get; set; }
+        public List<Notebook> Notebooks { get; set; }
     }
 }

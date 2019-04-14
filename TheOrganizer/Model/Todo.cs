@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 
 namespace TheOrganizer.Model
 {
-    public class Note
+    public class Todo
     {
         public int Id { get; set; }
-        public int NotebookId { get; set; }
-        public string Title { get; set; }
+        public int TodoListId { get; set; }
         public string Text { get; set; }
-        public DateTime DateCreated { get; set; }
+        public bool IsDone { get; set; }
 
-        public Notebook Notebook { get; set; }
+        public TodoList TodoList { get; set; }
     }
 }

@@ -8,10 +8,10 @@ namespace TheOrganizer.Services
 {
     public interface IEventService
     {
-        bool AddEvent(Event e);
-        bool EditEvent(Event e);
+        bool AddEvent(Event e, int userId);
+        bool EditEvent(Event e, int userId);
         bool RemoveEvent(int id, int userId);
-        IEnumerable<Event> GetEvents(int userId);
+        IEnumerable<Event> GetEvents(int calendarId, int userId);
         Event GetEvent(int id, int userId);
     }
 }

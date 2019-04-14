@@ -6,13 +6,13 @@ using TheOrganizer.Model;
 
 namespace TheOrganizer.Services
 {
-    public interface IContactServise
+    public interface IContactService
     {
         bool AddContact(Contact contact);
 
         bool EditContact(Contact contact);
 
-        bool RemoveContact(int comtactId, int ownerId);
+        bool RemoveContact(int contactId, int ownerId);
 
         IEnumerable<Contact> GetContacts(int ownerId);
     }
