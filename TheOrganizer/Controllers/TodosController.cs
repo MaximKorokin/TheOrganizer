@@ -27,7 +27,7 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             if (_todoService.AddTodo(todo, userId))
                 return Ok();
-            return BadRequest("There is something wrong with ToDo info");
+            return BadRequest("There is something wrong with Todo info");
         }
 
         [HttpPut("edit")]
@@ -40,7 +40,7 @@ namespace TheOrganizer.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult DeleteToDo([FromRoute] int id)
+        public IActionResult DeleteTodo([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_todoService.RemoveTodo(id, userId))
@@ -53,7 +53,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var todos = _todoService.GetTodos(userId, todoListId);
-            if (todos != null && todos.Count() > 0)
+            if (todos != null)
             {
                 return Ok(todos);
             }
