@@ -35,26 +35,67 @@ namespace TheOrganizerTests.TestServices
             },
         };
 
+        private User CurUser { get; set; }
+
         public bool AddUser(User user)
         {
+            if (user == null)
+            {
+                return false;
+            }
+
+            Users.Add(user);
+
             return true;
         }
 
         public UserEntity Authenticate(string email, string password)
         {
-            return new UserEntity()
+            var user = GetByEmail(email);
+
+            if (user == null)
             {
-                Token = "token",
-            };
+                return null;
+            }
+
+            if(user.Password == password)
+            {
+                CurUser = user;
+
+                return new UserEntity()
+                {
+                    Token = "token",
+                };
+            }
+
+            return null;
         }
 
-        public bool ChangeUser(User user)
+        public bool ChangeUser(User newUser)
         {
+            var user = Users.FirstOrDefault(u => u.Id == newUser.Id);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            Users[Users.IndexOf(user)] = newUser;
+
             return true;
         }
 
         public bool DeleteUser(int id)
         {
+            var user = Users.FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            Users.Remove(user);
+
             return true;
         }
 
@@ -65,12 +106,17 @@ namespace TheOrganizerTests.TestServices
 
         public User GetByEmail(string email)
         {
-            return Users.First(u => u.Email == email);
+            return Users.FirstOrDefault(u => u.Email == email);
         }
 
         public User GetUserById(int id)
         {
-            return Users.First(u => u.Id == id);
+            return Users.FirstOrDefault(u => u.Id == id);
+        }
+
+        public User GetCurrentUser()
+        {
+            return CurUser;
         }
     }
 }

@@ -29,8 +29,8 @@ namespace TheOrganizerTests.ControllersTests
         {
             var user = new User
             {
-                Email = "aaa@aaa.aaa",
-                Password = "password",
+                Email = "Email1",
+                Password = "Password1",
             };
 
             var result = _controller.Authenticate(user) as ObjectResult;
@@ -79,6 +79,66 @@ namespace TheOrganizerTests.ControllersTests
             Assert.True((result.Value as UserEntity).Token == "token", "Incorrect token of user");
         }
 
+        [Fact]
+        public void GetCurrentUser()
+        {
+            var user = new User
+            {
+                Email = "Email1",
+                Password = "Password1",
+            };
 
+            _controller.Authenticate(user);
+
+            var result = ((TestUserServices)_userService).GetCurrentUser();
+
+            Assert.True(result != null, "result is null");
+            Assert.True(result.Name == "Name1", "Incorrect name of user");
+            Assert.True(result.Password == "Password1", "Incorrect password of user");
+        }
+
+        [Fact]
+        public void ChangeCurrentUser()
+        {
+            var user = new User
+            {
+                Id = 1,
+                Email = "Email1",
+                Password = "Password1",
+            };
+
+            _controller.Authenticate(user);
+
+            user.Name = "newName";
+            user.Password = "newPass";
+
+            var result = ((TestUserServices)_userService).ChangeUser(user);
+
+            var newUser = _userService.GetUserById(user.Id);
+
+            Assert.True(result == true, "result is false");
+            Assert.True(newUser.Name == "newName", "Incorrect name of user");
+            Assert.True(newUser.Password == "newPass", "Incorrect password of user");
+        }
+
+        [Fact]
+        public void DeleteCurrentUser()
+        {
+            var user = new User
+            {
+                Id = 1,
+                Email = "Email1",
+                Password = "Password1",
+            };
+
+            _controller.Authenticate(user);
+
+            var result = ((TestUserServices)_userService).DeleteUser(user.Id);
+
+            var deletedUser = _userService.GetUserById(user.Id);
+
+            Assert.True(result == true, "result is false");
+            Assert.True(deletedUser == null, "deletedUser is not null");
+        }
     }
 }
