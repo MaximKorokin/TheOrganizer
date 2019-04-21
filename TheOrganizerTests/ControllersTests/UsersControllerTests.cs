@@ -1,11 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
+using System.Threading;
 using TheOrganizer.Controllers;
 using TheOrganizer.Entities;
+using TheOrganizer.Helpers;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 using TheOrganizerTests.TestServices;
@@ -20,14 +27,15 @@ namespace TheOrganizerTests.ControllersTests
 
         public UsersControllerTests()
         {
-            _userService = new TestUserServices();
+            _userService = new TestUserService();
             _controller = new UsersController(_userService);
+            ((TestUserService)_userService).Controller = _controller;
         }
 
         [Fact]
         public void Authenticate()
         {
-            var user = new User
+            var user = new User()
             {
                 Email = "Email1",
                 Password = "Password1",
@@ -37,7 +45,7 @@ namespace TheOrganizerTests.ControllersTests
 
             Assert.True(result != null, "result is null");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
-            Assert.True((result.Value as UserEntity).Token == "token", "Token is not valid");
+            Assert.True((result.Value as User).Name == "Name1", "Name is not correct");
         }
 
         [Fact]
@@ -76,7 +84,7 @@ namespace TheOrganizerTests.ControllersTests
 
             Assert.True(result != null, "result is null");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
-            Assert.True((result.Value as UserEntity).Token == "token", "Incorrect token of user");
+            Assert.True((result.Value as UserEntity).Name == "Name", "Incorrect Name of user");
         }
 
         [Fact]
@@ -90,11 +98,11 @@ namespace TheOrganizerTests.ControllersTests
 
             _controller.Authenticate(user);
 
-            var result = ((TestUserServices)_userService).GetCurrentUser();
+            var result = _controller.GetCurrentUser() as ObjectResult;
 
             Assert.True(result != null, "result is null");
-            Assert.True(result.Name == "Name1", "Incorrect name of user");
-            Assert.True(result.Password == "Password1", "Incorrect password of user");
+            Assert.True((result.Value as User).Name == "Name1", "Incorrect name of user");
+            Assert.True((result.Value as User).Password == "Password1", "Incorrect password of user");
         }
 
         [Fact]
@@ -112,13 +120,11 @@ namespace TheOrganizerTests.ControllersTests
             user.Name = "newName";
             user.Password = "newPass";
 
-            var result = ((TestUserServices)_userService).ChangeUser(user);
-
-            var newUser = _userService.GetUserById(user.Id);
-
-            Assert.True(result == true, "result is false");
-            Assert.True(newUser.Name == "newName", "Incorrect name of user");
-            Assert.True(newUser.Password == "newPass", "Incorrect password of user");
+            var result = _controller.ChangeCurrentUser(user) as ObjectResult;
+            
+            Assert.True(result != null, "result is null");
+            Assert.True((result.Value as User).Name == "newName", "Incorrect name of user");
+            Assert.True((result.Value as User).Password == "newPass", "Incorrect password of user");
         }
 
         [Fact]
@@ -133,12 +139,12 @@ namespace TheOrganizerTests.ControllersTests
 
             _controller.Authenticate(user);
 
-            var result = ((TestUserServices)_userService).DeleteUser(user.Id);
+            var result = _controller.DeleteCurrentUser();
 
             var deletedUser = _userService.GetUserById(user.Id);
 
-            Assert.True(result == true, "result is false");
-            Assert.True(deletedUser == null, "deletedUser is not null");
+            Assert.True(result != null, "result is null");
+            Assert.True(deletedUser == null, "deletedUser is not null (user has not been deleted)");
         }
     }
 }
