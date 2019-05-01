@@ -26,7 +26,7 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             contact.OwnerId = userId;
             if (_contactService.AddContact(contact))
-                return Ok();
+                return Ok(contact);
             return BadRequest("There is something wrong with contact info");
         }
 
@@ -46,14 +46,17 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             if (_contactService.RemoveContact(id, userId))
                 return Ok();
-            return StatusCode(404);
+            return NotFound("Contact not found");
         }
 
         [HttpGet]
         public IActionResult GetContacts()
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_contactService.GetContacts(userId));
+            var contacts = _contactService.GetContacts(userId);
+            if (contacts != null && contacts.Count() > 0)
+                return Ok(contacts);
+            return BadRequest("Could not get contacts");
         }
     }
 }

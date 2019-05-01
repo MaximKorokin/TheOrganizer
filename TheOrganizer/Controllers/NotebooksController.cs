@@ -47,21 +47,27 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             if (_notebookService.RemoveNotebookr(id, userId))
                 return Ok();
-            return StatusCode(404);
+            return NotFound("Notebook not found");
         }
 
         [HttpGet("get/{id}")]
         public IActionResult GetNotebook([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_notebookService.GetNotebook(id, userId));
+            var notebook = _notebookService.GetNotebook(id, userId);
+            if (notebook != null)
+                return Ok();
+            return NotFound("Notebook not found");
         }
 
         [HttpGet("get")]
         public IActionResult GetNotebooks()
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_notebookService.GetNotebooks(userId));
+            var notebooks = _notebookService.GetNotebooks(userId);
+            if (notebooks != null && notebooks.Count() > 0)
+                return Ok(notebooks);
+            return BadRequest("Could not get notebooks");
         }
     }
 }

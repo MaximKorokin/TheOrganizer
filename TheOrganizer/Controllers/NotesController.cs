@@ -26,7 +26,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_noteService.AddNote(note, userId))
-                return Ok();
+                return Ok(note);
             return BadRequest("There is something wrong with Note info");
         }
 
@@ -45,7 +45,7 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             if (_noteService.RemoveNote(id, userId))
                 return Ok();
-            return NotFound();
+            return NotFound("Note not found");
         }
 
         [HttpGet("getAll/{notebookId}")]
@@ -53,21 +53,21 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var notes = _noteService.GetNotes(userId, notebookId);
-            if (notes != null)
+            if (notes != null && notes.Count() > 0)
             {
                 return Ok(notes);
             }
-            return StatusCode(404);
+            return NotFound("Notes not found");
         }
 
         [HttpGet("get/{id}")]
         public IActionResult GetNote([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var res = _noteService.GetNote(id, userId);
-            if (res != null)
-                return Ok(res);
-            return NotFound();
+            var note = _noteService.GetNote(id, userId);
+            if (note != null)
+                return Ok(note);
+            return NotFound("Note not found");
         }
     }
 }

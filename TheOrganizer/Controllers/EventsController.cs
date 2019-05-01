@@ -27,7 +27,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_eventService.AddEvent(e, userId))
-                return Ok();
+                return Ok(e);
             return BadRequest("There is something wrong with event info");
         }
 
@@ -46,7 +46,7 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             if (_eventService.RemoveEvent(id, userId))
                 return Ok();
-            return NotFound();
+            return NotFound("Event not found");
         }
 
         [HttpGet("getAll/{calendarId}")]
@@ -54,6 +54,8 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var events = _eventService.GetEvents(calendarId, userId);
+            if (events == null || events.Count() == 0)
+                return NotFound("Events not found");
             foreach (var e in events)
                 ClearEvent(e);
             return Ok(events);
@@ -69,7 +71,7 @@ namespace TheOrganizer.Controllers
                 ClearEvent(e);
                 return Ok(e);
             }
-            return NotFound();
+            return NotFound("Event not found");
         }
 
         private Event ClearEvent(Event e)

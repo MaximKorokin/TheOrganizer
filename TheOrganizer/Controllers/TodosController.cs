@@ -26,7 +26,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_todoService.AddTodo(todo, userId))
-                return Ok();
+                return Ok(todo);
             return BadRequest("There is something wrong with Todo info");
         }
 
@@ -45,7 +45,7 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             if (_todoService.RemoveTodo(id, userId))
                 return Ok();
-            return NotFound();
+            return NotFound("Todo not found");
         }
 
         [HttpGet("getAll/{todoListId}")]
@@ -53,31 +53,31 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var todos = _todoService.GetTodos(userId, todoListId);
-            if (todos != null)
+            if (todos != null && todos.Count() > 0)
             {
                 return Ok(todos);
             }
-            return StatusCode(404);
+            return NotFound("Todos not found");
         }
 
         [HttpGet("get/{id}")]
         public IActionResult GetTodo([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var res = _todoService.GetTodo(id, userId);
-            if (res != null)
-                return Ok(res);
-            return NotFound();
+            var todo = _todoService.GetTodo(id, userId);
+            if (todo != null)
+                return Ok(todo);
+            return NotFound("Todo not found");
         }
 
         [HttpGet("check/{id}")]
         public IActionResult IsTodoDone([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var res = _todoService.GetTodo(id, userId);
-            if (res != null)
-                return Ok(res.IsDone);
-            return NotFound();
+            var todo = _todoService.GetTodo(id, userId);
+            if (todo != null)
+                return Ok(todo.IsDone);
+            return NotFound("Todo not found");
         }
     }
 }

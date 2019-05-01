@@ -47,21 +47,27 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             if (_eventService.RemoveCalendar(id, userId))
                 return Ok();
-            return StatusCode(404);
+            return NotFound("Calendar not found");
         }
 
         [HttpGet("get/{id}")]
         public IActionResult GetCalendar([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_eventService.GetCalendar(id, userId));
+            var calendar = _eventService.GetCalendar(id, userId);
+            if (calendar != null)
+                return Ok(calendar);
+            return NotFound("Calendar not found");
         }
 
         [HttpGet("get")]
         public IActionResult GetCalendars()
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_eventService.GetCalendars(userId));
+            var calendars = _eventService.GetCalendars(userId);
+            if (calendars != null && calendars.Count() > 0)
+                return Ok(calendars);
+            return BadRequest("Could not get calendars");
         }
     }
 }

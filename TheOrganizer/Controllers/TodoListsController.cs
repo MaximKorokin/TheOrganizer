@@ -48,21 +48,27 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             if (_todoListService.RemoveTodoList(id, userId))
                 return Ok();
-            return StatusCode(404);
+            return NotFound("Todo list not found");
         }
 
         [HttpGet("get/{id}")]
         public IActionResult GetTodoList([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_todoListService.GetTodoList(id, userId));
+            var todoList = _todoListService.GetTodoList(id, userId);
+            if (todoList != null)
+                return Ok(todoList);
+            return NotFound("Todo list not found");
         }
 
         [HttpGet("get")]
         public IActionResult GetTodoLists()
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_todoListService.GetTodoLists(userId));
+            var todoLists = _todoListService.GetTodoLists(userId);
+            if (todoLists != null && todoLists.Count() > 0)
+                return Ok(todoLists);
+            return BadRequest("Could not get todo lists");
         }
     }
 }

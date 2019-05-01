@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using TheOrganizer.Helpers;
+using TheOrganizer.Middleware;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 
@@ -90,6 +91,8 @@ namespace TheOrganizer
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseMiddleware(typeof(ResponseWrappingMiddleware));
 
             // global cors policy
             app.UseCors(x => x
