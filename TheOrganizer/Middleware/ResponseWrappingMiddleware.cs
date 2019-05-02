@@ -35,7 +35,8 @@ namespace TheOrganizer.Middleware
                 finally
                 {
                     memStream.Position = 0;
-                    await WrapResponse(context);
+                    if (context.Response.StatusCode >= 400 && context.Response.StatusCode < 600)
+                        await WrapResponse(context);
 
                     memStream.Position = 0;
                     await memStream.CopyToAsync(originalBody);
@@ -62,9 +63,6 @@ namespace TheOrganizer.Middleware
 
                 switch (context.Response.StatusCode)
                 {
-                    case 200:
-                        response.Result = bodyObject;
-                        break;
                     case 500:
                         response.ErrorMessage = "Something went wrong";
                         break;
