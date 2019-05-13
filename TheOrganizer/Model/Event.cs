@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,8 +13,10 @@ namespace TheOrganizer.Model
         public string Title { get; set; }
         public string Description { get; set; }
         public string Tag { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        [Column(name: "StartTime")]
+        public DateTime Start { get; set; }
+        [Column(name: "EndTime")]
+        public DateTime End { get; set; }
         
         public Calendar Calendar { get; set; }
     }

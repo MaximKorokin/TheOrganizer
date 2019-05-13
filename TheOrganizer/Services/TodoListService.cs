@@ -16,7 +16,7 @@ namespace TheOrganizer.Services
         }
         public TodoList AddTodoList(TodoList todoList)
         {
-            if (todoList != null)
+            if (todoList != null && !string.IsNullOrWhiteSpace(todoList.Title))
             {
                 _db.TodoLists.Add(todoList);
                 _db.SaveChanges();
@@ -27,6 +27,9 @@ namespace TheOrganizer.Services
 
         public bool EditTodoList(TodoList todoList)
         {
+            if (string.IsNullOrWhiteSpace(todoList.Title))
+                return false;
+
             TodoList oldTodoList = _db.TodoLists.Find(todoList.Id);
 
             if (oldTodoList != null && oldTodoList.OwnerId == todoList.OwnerId)

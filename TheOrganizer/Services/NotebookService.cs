@@ -15,7 +15,7 @@ namespace TheOrganizer.Services
         }
         public Notebook AddNotebook(Notebook notebook)
         {
-            if (notebook != null)
+            if (notebook != null && !string.IsNullOrWhiteSpace(notebook.Title))
             {
                 _db.Notebooks.Add(notebook);
                 _db.SaveChanges();
@@ -26,6 +26,9 @@ namespace TheOrganizer.Services
 
         public bool EditNotebook(Notebook notebook)
         {
+            if (string.IsNullOrWhiteSpace(notebook.Title))
+                return false;
+
             Notebook oldNotebook = _db.Notebooks.Find(notebook.Id);
 
             if (oldNotebook != null && oldNotebook.OwnerId == notebook.OwnerId)

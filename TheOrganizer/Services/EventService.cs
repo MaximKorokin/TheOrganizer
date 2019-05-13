@@ -21,6 +21,8 @@ namespace TheOrganizer.Services
                 return false;
             _db.Add(e);
             _db.SaveChanges();
+
+            e.Calendar = null;
             return true;
         }
 
@@ -63,7 +65,7 @@ namespace TheOrganizer.Services
 
         private bool CheckEventValidity(Event e)
         {
-            return !(e.StartTime > e.EndTime || string.IsNullOrWhiteSpace(e.Title));
+            return !(e.Start > e.End || string.IsNullOrWhiteSpace(e.Title));
         }
 
         private bool CheckCalendarAccess(int calendarId, int userId)

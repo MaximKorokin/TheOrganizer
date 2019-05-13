@@ -22,7 +22,7 @@ namespace TheOrganizer.Middleware
             using (var memStream = new MemoryStream())
             {
                 Stream originalBody = context.Response.Body;
-
+                
                 try
                 {
                     context.Response.Body = memStream;
