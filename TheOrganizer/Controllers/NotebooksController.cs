@@ -65,7 +65,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var notebooks = _notebookService.GetNotebooks(userId);
-            if (notebooks != null && notebooks.Count() > 0)
+            if (notebooks != null)
                 return Ok(notebooks);
             return BadRequest("Could not get notebooks");
         }

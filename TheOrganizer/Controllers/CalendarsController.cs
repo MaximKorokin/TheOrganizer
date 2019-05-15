@@ -65,7 +65,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var calendars = _eventService.GetCalendars(userId);
-            if (calendars != null && calendars.Count() > 0)
+            if (calendars != null)
                 return Ok(calendars);
             return BadRequest("Could not get calendars");
         }

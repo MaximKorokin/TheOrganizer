@@ -66,7 +66,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var todoLists = _todoListService.GetTodoLists(userId);
-            if (todoLists != null && todoLists.Count() > 0)
+            if (todoLists != null)
                 return Ok(todoLists);
             return BadRequest("Could not get todo lists");
         }

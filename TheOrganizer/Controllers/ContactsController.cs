@@ -54,7 +54,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var contacts = _contactService.GetContacts(userId);
-            if (contacts != null && contacts.Count() > 0)
+            if (contacts != null)
                 return Ok(contacts);
             return BadRequest("Could not get contacts");
         }
