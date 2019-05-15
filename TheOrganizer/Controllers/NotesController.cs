@@ -53,7 +53,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var notes = _noteService.GetNotes(userId, notebookId);
-            if (notes != null && notes.Count() > 0)
+            if (notes != null)
             {
                 return Ok(notes);
             }

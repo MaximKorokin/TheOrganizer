@@ -53,7 +53,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var todos = _todoService.GetTodos(userId, todoListId);
-            if (todos != null && todos.Count() > 0)
+            if (todos != null)
             {
                 return Ok(todos);
             }

@@ -54,7 +54,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             var events = _eventService.GetEvents(calendarId, userId);
-            if (events == null || events.Count() == 0)
+            if (events == null)
                 return NotFound("Events not found");
             foreach (var e in events)
                 ClearEvent(e);
