@@ -52,7 +52,7 @@ namespace TheOrganizer.Controllers
         public IActionResult GetNotes([FromRoute] int notebookId)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var notes = _noteService.GetNotes(userId, notebookId);
+            var notes = _noteService.GetNotes(notebookId, userId);
             if (notes != null)
             {
                 return Ok(notes);
