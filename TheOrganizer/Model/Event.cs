@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace TheOrganizer.Model
         [Column(name: "EndTime")]
         public DateTime End { get; set; }
         
+        [JsonIgnore]
         public Calendar Calendar { get; set; }
     }
 }
