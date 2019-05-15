@@ -52,7 +52,7 @@ namespace TheOrganizer.Controllers
         public IActionResult GetTodos([FromRoute] int todoListId)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            var todos = _todoService.GetTodos(userId, todoListId);
+            var todos = _todoService.GetTodos(todoListId, userId);
             if (todos != null)
             {
                 return Ok(todos);
