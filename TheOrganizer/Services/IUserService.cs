@@ -9,7 +9,7 @@ namespace TheOrganizer.Services
 {
     public interface IUserService
     {
-        UserEntity Authenticate(string username, string password);
+        UserEntity Authenticate(string email, string password);
         IEnumerable<User> GetAll();
         User GetByEmail(string email);
         bool AddUser(User user);

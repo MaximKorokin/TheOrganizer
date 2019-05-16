@@ -1,15 +1,29 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
+using System.Threading;
+using TheOrganizer.Controllers;
 using TheOrganizer.Entities;
+using TheOrganizer.Helpers;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 
 namespace TheOrganizerTests.TestServices
 {
-    public class TestUserServices : IUserService
+    internal class TestUserService : IUserService
     {
+        private const string Secret = "Subscribe to Mumbo Jumbo!";
+
+        public UsersController Controller { get; set; }
+
         private List<User> Users { get; set; } = new List<User>
         {
             new User
@@ -35,8 +49,6 @@ namespace TheOrganizerTests.TestServices
             },
         };
 
-        private User CurUser { get; set; }
-
         public bool AddUser(User user)
         {
             if (user == null)
@@ -51,24 +63,28 @@ namespace TheOrganizerTests.TestServices
 
         public UserEntity Authenticate(string email, string password)
         {
-            var user = GetByEmail(email);
+            var user = Users.FirstOrDefault(x => x.Email == email && x.Password == password);
 
-            if (user == null)
+            Controller.ControllerContext = new ControllerContext
             {
-                return null;
-            }
-
-            if(user.Password == password)
-            {
-                CurUser = user;
-
-                return new UserEntity()
+                HttpContext = new DefaultHttpContext
                 {
-                    Token = "token",
-                };
-            }
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.Name, "1")
+                    }, "someAuthTypeName")),
+                }
+            };
 
-            return null;
+            var userEntity = new UserEntity
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Password = user.Password,
+            };
+
+            return userEntity;
         }
 
         public bool ChangeUser(User newUser)
@@ -112,11 +128,6 @@ namespace TheOrganizerTests.TestServices
         public User GetUserById(int id)
         {
             return Users.FirstOrDefault(u => u.Id == id);
-        }
-
-        public User GetCurrentUser()
-        {
-            return CurUser;
         }
     }
 }

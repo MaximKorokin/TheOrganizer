@@ -12,7 +12,7 @@ namespace TheOrganizer.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class ContactsController : Controller
+    public class ContactsController : ControllerBase
     {
         private IContactService _contactService;
         public ContactsController(IContactService contactService)
