@@ -32,7 +32,7 @@ namespace TheOrganizerTests.ControllersTests
                 Title = "Title",
             };
 
-            var result = _controller.AddEvent(ev) as OkResult;
+            var result = _controller.AddEvent(ev) as ObjectResult;
 
             Assert.True(result != null, "result is null");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
@@ -48,7 +48,7 @@ namespace TheOrganizerTests.ControllersTests
                 Title = "NewTitle",
             };
 
-            var result = _controller.EditEvent(ev) as OkResult;
+            var result = _controller.EditEvent(ev) as StatusCodeResult;
 
             Assert.True(result != null, "result is null");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
@@ -64,7 +64,7 @@ namespace TheOrganizerTests.ControllersTests
                 Title = "NewTitle",
             };
 
-            var result = _controller.RemoveEvent(ev.Id) as OkResult;
+            var result = _controller.RemoveEvent(ev.Id) as StatusCodeResult;
 
             Assert.True(result != null, "result is null");
             Assert.True(result.StatusCode == 200, "Status code is not OK");

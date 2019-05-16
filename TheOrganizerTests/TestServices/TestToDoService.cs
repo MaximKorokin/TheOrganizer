@@ -11,7 +11,7 @@ using TheOrganizer.Services;
 
 namespace TheOrganizerTests.TestServices
 {
-    internal class TestEventService : IEventService
+    internal class TestToDoService : ITodoService
     {
         private List<User> Users { get; set; } = new List<User>
         {
@@ -37,34 +37,44 @@ namespace TheOrganizerTests.TestServices
                 Password = "Password3",
             },
         };
-        private List<Event> Events { get; set; } = new List<Event>
+        private List<Todo> ToDos { get; set; } = new List<Todo>
         {
-            new Event
+            new Todo
             {
                 Id = 1,
-                Title = "Title1",
-                Description = "Description1",
-                CalendarId = 1,
+                Text = "Text1",
+                TodoListId = 1,
+                TodoList = new TodoList()
+                {
+                    OwnerId = 1
+                }
             },
-            new Event
+            new Todo
             {
                 Id = 2,
-                Title = "Title2",
-                Description = "Description2",
-                CalendarId = 1,
+                Text = "Text2",
+                TodoListId = 1,
+                TodoList = new TodoList()
+                {
+                    OwnerId = 1
+                }
             },
-            new Event
+            new Todo
             {
                 Id = 3,
-                Title = "Title3",
-                Description = "Description3",
-                CalendarId = 2,
+                Text = "Text3",
+                TodoListId = 2,
+                TodoList = new TodoList()
+                {
+                    OwnerId = 2
+                }
             },
         };
 
-        private EventsController _controller;
+        private TodosController _controller;
 
-        public EventsController Controller {
+        public TodosController Controller
+        {
             get
             {
                 return _controller;
@@ -78,14 +88,14 @@ namespace TheOrganizerTests.TestServices
 
 
 
-        public bool AddEvent(Event e, int userId)
+        public bool AddTodo(Todo toDo, int ownerId)
         {
-            if (e == null)
+            if (toDo == null)
                 return false;
 
             try
             {
-                Events.Add(e);
+                ToDos.Add(toDo);
             }
             catch
             {
@@ -95,34 +105,35 @@ namespace TheOrganizerTests.TestServices
             return true;
         }
 
-        public bool EditEvent(Event e, int userId)
+        public bool EditTodo(Todo toDo, int ownerId)
         {
-            var ev = Events.FirstOrDefault(eve => eve.Id == e.Id);
+            if (toDo == null)
+                return false;
 
-            if (ev != null)
-                return true;
-            return false;
+            var cur = ToDos.FirstOrDefault(t => t.Id == toDo.Id);
+
+            if (cur == null)
+                return false;
+
+            return true;
         }
 
-        public Event GetEvent(int id, int userId)
+        public bool RemoveTodo(int toDoId, int ownerId)
         {
-            return Events.FirstOrDefault(e => e.Id == id);
+            var deleted = ToDos.Remove(ToDos.FirstOrDefault(t => t.Id == toDoId));
+
+            return deleted;
         }
 
-        public IEnumerable<Event> GetEvents(int calendarId, int userId)
+        public IEnumerable<Todo> GetTodos(int ownerId, int toDoListId)
         {
-            return Events.Where(e => e.CalendarId == calendarId).ToList();
+            return ToDos.Where(t => t.TodoList.OwnerId == ownerId && t.TodoListId == toDoListId).ToList();
         }
 
-        public bool RemoveEvent(int id, int userId)
+        public Todo GetTodo(int toDoId, int ownerId)
         {
-            var ev = Events.FirstOrDefault(eve => eve.Id == id);
-
-            if (ev != null)
-                return true;
-            return false;
+            return ToDos.FirstOrDefault(t => t.TodoList.OwnerId == ownerId && t.Id == toDoId);
         }
-
 
 
 

@@ -11,7 +11,7 @@ using TheOrganizer.Services;
 
 namespace TheOrganizerTests.TestServices
 {
-    internal class TestEventService : IEventService
+    internal class TestContactService : IContactService
     {
         private List<User> Users { get; set; } = new List<User>
         {
@@ -37,34 +37,38 @@ namespace TheOrganizerTests.TestServices
                 Password = "Password3",
             },
         };
-        private List<Event> Events { get; set; } = new List<Event>
+        private List<Contact> Contacts { get; set; } = new List<Contact>
         {
-            new Event
+            new Contact
             {
                 Id = 1,
-                Title = "Title1",
-                Description = "Description1",
-                CalendarId = 1,
+                Name = "Name1",
+                Email = "Email1",
+                PhoneNumber = "Number1",
+                OwnerId = 1,
             },
-            new Event
+            new Contact
             {
                 Id = 2,
-                Title = "Title2",
-                Description = "Description2",
-                CalendarId = 1,
+                Name = "Name2",
+                Email = "Email2",
+                PhoneNumber = "Number2",
+                OwnerId = 1,
             },
-            new Event
+            new Contact
             {
                 Id = 3,
-                Title = "Title3",
-                Description = "Description3",
-                CalendarId = 2,
+                Name = "Name3",
+                Email = "Email3",
+                PhoneNumber = "Number3",
+                OwnerId = 2,
             },
         };
 
-        private EventsController _controller;
+        private ContactsController _controller;
 
-        public EventsController Controller {
+        public ContactsController Controller
+        {
             get
             {
                 return _controller;
@@ -78,14 +82,15 @@ namespace TheOrganizerTests.TestServices
 
 
 
-        public bool AddEvent(Event e, int userId)
+
+        public bool AddContact(Contact contact)
         {
-            if (e == null)
+            if (contact == null)
                 return false;
 
             try
             {
-                Events.Add(e);
+                Contacts.Add(contact);
             }
             catch
             {
@@ -95,34 +100,30 @@ namespace TheOrganizerTests.TestServices
             return true;
         }
 
-        public bool EditEvent(Event e, int userId)
+        public bool EditContact(Contact contact)
         {
-            var ev = Events.FirstOrDefault(eve => eve.Id == e.Id);
+            if (contact == null)
+                return false;
 
-            if (ev != null)
-                return true;
-            return false;
+            var cur = Contacts.FirstOrDefault(c => c.Id == contact.Id);
+
+            if (cur == null)
+                return false;
+
+            return true;
         }
 
-        public Event GetEvent(int id, int userId)
+        public bool RemoveContact(int contactId, int ownerId)
         {
-            return Events.FirstOrDefault(e => e.Id == id);
+            var deleted = Contacts.Remove(Contacts.FirstOrDefault(c => c.Id == contactId));
+
+            return deleted;
         }
 
-        public IEnumerable<Event> GetEvents(int calendarId, int userId)
+        public IEnumerable<Contact> GetContacts(int ownerId)
         {
-            return Events.Where(e => e.CalendarId == calendarId).ToList();
+            return Contacts.Where(c => c.OwnerId == ownerId).ToList();
         }
-
-        public bool RemoveEvent(int id, int userId)
-        {
-            var ev = Events.FirstOrDefault(eve => eve.Id == id);
-
-            if (ev != null)
-                return true;
-            return false;
-        }
-
 
 
 

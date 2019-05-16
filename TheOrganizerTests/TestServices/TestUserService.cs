@@ -18,7 +18,7 @@ using TheOrganizer.Services;
 
 namespace TheOrganizerTests.TestServices
 {
-    public class TestUserService : IUserService
+    internal class TestUserService : IUserService
     {
         private const string Secret = "Subscribe to Mumbo Jumbo!";
 
