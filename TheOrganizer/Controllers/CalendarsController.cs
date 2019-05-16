@@ -32,7 +32,7 @@ namespace TheOrganizer.Controllers
         }
 
         [HttpPut("edit")]
-        public IActionResult EditContact([FromBody] Calendar calendar)
+        public IActionResult EditCalendar([FromBody] Calendar calendar)
         {
             int.TryParse(User.Identity.Name, out int userId);
             calendar.OwnerId = userId;
@@ -42,26 +42,32 @@ namespace TheOrganizer.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult RemoveContact([FromRoute] int id)
+        public IActionResult RemoveCalendar([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_eventService.RemoveCalendar(id, userId))
                 return Ok();
-            return StatusCode(404);
+            return NotFound("Calendar not found");
         }
 
         [HttpGet("get/{id}")]
-        public IActionResult GetContact([FromRoute] int id)
+        public IActionResult GetCalendar([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_eventService.GetCalendar(id, userId));
+            var calendar = _eventService.GetCalendar(id, userId);
+            if (calendar != null)
+                return Ok(calendar);
+            return NotFound("Calendar not found");
         }
 
         [HttpGet("get")]
-        public IActionResult GetContacts()
+        public IActionResult GetCalendars()
         {
             int.TryParse(User.Identity.Name, out int userId);
-            return Ok(_eventService.GetCalendars(userId));
+            var calendars = _eventService.GetCalendars(userId);
+            if (calendars != null)
+                return Ok(calendars);
+            return BadRequest("Could not get calendars");
         }
     }
 }

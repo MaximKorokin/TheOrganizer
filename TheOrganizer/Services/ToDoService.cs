@@ -16,9 +16,7 @@ namespace TheOrganizer.Services
         }
         public bool AddTodo(Todo todo, int ownerId)
         {
-            var currentTodoList = _db.TodoLists.Find(todo.TodoListId);
-
-            if (todo != null && CheckTodoListAccess(currentTodoList.Id, ownerId))
+            if (todo != null && CheckTodoListAccess(todo.TodoListId, ownerId))
             {
                 _db.Todos.Add(todo);
                 _db.SaveChanges();
@@ -53,10 +51,10 @@ namespace TheOrganizer.Services
 
         public bool RemoveTodo(int todoId, int ownerId)
         {
-            var currentToDo = _db.Todos.Find(todoId);
-            if (currentToDo == null || CheckTodoListAccess(currentToDo.TodoListId, ownerId))
+            var currentTodo = _db.Todos.Find(todoId);
+            if (currentTodo == null || CheckTodoListAccess(currentTodo.TodoListId, ownerId))
                 return false;
-            _db.Todos.Remove(currentToDo);
+            _db.Todos.Remove(currentTodo);
             _db.SaveChanges();
             return true;
         }

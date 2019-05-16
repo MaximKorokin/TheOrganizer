@@ -29,7 +29,7 @@ namespace TheOrganizer.Controllers
             var user = _userService.Authenticate(userParam.Email, userParam.Password);
 
             if (user == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest("Username or password is incorrect");
 
             return Ok(user);
         }
@@ -38,7 +38,9 @@ namespace TheOrganizer.Controllers
         public IActionResult GetAll()
         {
             var users = _userService.GetAll();
-            return Ok(users);
+            if (users != null && users.Count() > 0)
+                return Ok(users);
+            return BadRequest("Could not get users");
         }
 
         [HttpGet("get")]
@@ -47,7 +49,7 @@ namespace TheOrganizer.Controllers
             var user = _userService.GetByEmail(email);
 
             if (user == null)
-                return NotFound();
+                return NotFound("User not found");
 
             return Ok(user);
         }
@@ -68,7 +70,7 @@ namespace TheOrganizer.Controllers
         {
             if (int.TryParse(User.Identity.Name, out int currentId))
                 return Ok(_userService.GetUserById(currentId));
-            return NotFound();
+            return NotFound("User not found");
         }
 
         [HttpPut("current/change")]
@@ -76,11 +78,11 @@ namespace TheOrganizer.Controllers
         {
             int id;
             if (!int.TryParse(User.Identity.Name, out id))
-                return NotFound();
+                return NotFound("User not found");
             user.Id = id;
             if (_userService.ChangeUser(user))
                 return Ok(user);
-            return BadRequest();
+            return BadRequest("Something is wrng with user data");
         }
 
         [HttpDelete("current/delete")]
@@ -88,10 +90,10 @@ namespace TheOrganizer.Controllers
         {
             int id;
             if (!int.TryParse(User.Identity.Name, out id))
-                return BadRequest();
+                return BadRequest("Can not delete");
             if (_userService.DeleteUser(id))
                 return Ok();
-            return NotFound();
+            return NotFound("User not found");
         }
     }
 }

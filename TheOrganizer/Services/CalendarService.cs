@@ -17,7 +17,7 @@ namespace TheOrganizer.Services
 
         public Calendar AddCalendar(Calendar calendar)
         {
-            if (calendar != null)
+            if (calendar != null && !string.IsNullOrWhiteSpace(calendar.Title))
             {
                 _db.Calendars.Add(calendar);
                 _db.SaveChanges();
@@ -28,6 +28,9 @@ namespace TheOrganizer.Services
 
         public bool EditCalendar(Calendar calendar)
         {
+            if (string.IsNullOrWhiteSpace(calendar.Title))
+                return false;
+
             Calendar oldCalendar = _db.Calendars.Find(calendar.Id);
 
             if (oldCalendar != null && oldCalendar.OwnerId == calendar.OwnerId)
