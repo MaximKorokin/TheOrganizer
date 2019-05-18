@@ -31,10 +31,7 @@ namespace TheOrganizer.Controllers
             List<Event> events = new List<Event>();
             foreach (var c in calendars)
             {
-                var response = _eventService.GetEvents(c.Id, c.OwnerId)
-                    .Where(x => x.Calendar.IsDisplayed)
-                    .ToList();
-
+                var response = _eventService.GetEvents(c.Id, c.OwnerId).ToList();
                 events.AddRange(response);
             }
             return Ok(events);
