@@ -16,10 +16,28 @@ namespace TheOrganizer.Controllers
     public class EventsController : ControllerBase
     {
         private IEventService _eventService;
-
-        public EventsController(IEventService eventService)
+        private ICalendarService _calendarService;
+        public EventsController(IEventService eventService, ICalendarService calendarService)
         {
             _eventService = eventService;
+            _calendarService = calendarService;
+        }
+
+        [HttpGet("listofevents")]
+        public IActionResult ListOfEvents()
+        {
+            int.TryParse(User.Identity.Name, out int userId);
+            var calendars = _calendarService.GetCalendars(userId).Where(x => x.IsDisplayed);
+            List<Event> events = new List<Event>();
+            foreach (var c in calendars)
+            {
+                var response = _eventService.GetEvents(c.Id, c.OwnerId)
+                    .Where(x => x.Calendar.IsDisplayed)
+                    .ToList();
+
+                events.AddRange(response);
+            }
+            return Ok(events);
         }
 
         [HttpPost("add")]
