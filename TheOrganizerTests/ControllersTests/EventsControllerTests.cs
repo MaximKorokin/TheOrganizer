@@ -14,12 +14,14 @@ namespace TheOrganizerTests.ControllersTests
     public class EventsControllerTests
     {
         private readonly IEventService _eventService;
+        private readonly ICalendarService _calendarService;
         private readonly EventsController _controller;
 
         public EventsControllerTests()
         {
             _eventService = new TestEventService();
-            _controller = new EventsController(_eventService);
+            _calendarService = new TestCalendarService();
+            _controller = new EventsController(_eventService, _calendarService);
             ((TestEventService)_eventService).Controller = _controller;
         }
 

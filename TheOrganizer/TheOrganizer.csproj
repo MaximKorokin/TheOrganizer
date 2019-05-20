@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20190412212332_EntitiesGroups.Designer.cs" />
     <Compile Remove="Migrations\20190412213333_EntitiesGroups.cs" />
     <Compile Remove="Migrations\20190412213333_EntitiesGroups.Designer.cs" />
+    <Compile Remove="Migrations\20190520071956_TitleInTodo.cs" />
+    <Compile Remove="Migrations\20190520071956_TitleInTodo.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

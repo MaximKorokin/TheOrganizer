@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,9 +45,11 @@ namespace TheOrganizer.Services
             return _db.Todos.Where(t => t.Id == todoId && t.TodoList.OwnerId == ownerId).FirstOrDefault();
         }
 
-        public IEnumerable<Todo> GetTodos(int ownerId, int todoListId)
+        public IEnumerable<Todo> GetTodos(int todoListId, int ownerId)
         {
-            return _db.Todos.Where(t => t.TodoList.OwnerId == ownerId && t.TodoListId == todoListId);
+            if (!CheckTodoListAccess(todoListId, ownerId))
+                return null;
+            return _db.Todos.Where(t => t.TodoListId == todoListId);
         }
 
         public bool RemoveTodo(int todoId, int ownerId)
