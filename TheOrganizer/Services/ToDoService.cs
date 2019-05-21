@@ -55,7 +55,7 @@ namespace TheOrganizer.Services
         public bool RemoveTodo(int todoId, int ownerId)
         {
             var currentTodo = _db.Todos.Find(todoId);
-            if (currentTodo == null || CheckTodoListAccess(currentTodo.TodoListId, ownerId))
+            if (currentTodo == null || !CheckTodoListAccess(currentTodo.TodoListId, ownerId))
                 return false;
             _db.Todos.Remove(currentTodo);
             _db.SaveChanges();
