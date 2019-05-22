@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
@@ -15,7 +10,8 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class NotesController : ControllerBase
     {
-        private INoteService _noteService;
+        private readonly INoteService _noteService;
+
         public NotesController(INoteService noteService)
         {
             _noteService = noteService;
@@ -35,12 +31,12 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_noteService.EditNote(note, userId))
-                return Ok();
+                return Ok(note);
             return BadRequest("There is something wrong with Note info");
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult DeleteNote([FromRoute] int id)
+        public IActionResult RemoveNote([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_noteService.RemoveNote(id, userId))

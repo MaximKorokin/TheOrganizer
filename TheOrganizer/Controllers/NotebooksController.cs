@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
@@ -15,7 +10,8 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class NotebooksController : ControllerBase
     {
-        private INotebookService _notebookService;
+        private readonly INotebookService _notebookService;
+
         public NotebooksController(INotebookService notebookService)
         {
             _notebookService = notebookService;
@@ -26,7 +22,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             notebook.OwnerId = userId;
-            if (_notebookService.AddNotebook(notebook) != null)
+            if (_notebookService.AddNotebook(notebook))
                 return Ok(notebook);
             return BadRequest("There is something wrong with notebook info");
         }
@@ -37,7 +33,7 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             notebook.OwnerId = userId;
             if (_notebookService.EditNotebook(notebook))
-                return Ok();
+                return Ok(notebook);
             return BadRequest("There is something wrong with notebook info");
         }
 

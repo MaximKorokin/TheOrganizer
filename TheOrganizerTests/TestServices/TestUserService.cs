@@ -87,7 +87,7 @@ namespace TheOrganizerTests.TestServices
             return userEntity;
         }
 
-        public bool ChangeUser(User newUser)
+        public bool EditUser(User newUser)
         {
             var user = Users.FirstOrDefault(u => u.Id == newUser.Id);
 
@@ -101,7 +101,7 @@ namespace TheOrganizerTests.TestServices
             return true;
         }
 
-        public bool DeleteUser(int id)
+        public bool RemoveUser(int id)
         {
             var user = Users.FirstOrDefault(u => u.Id == id);
 

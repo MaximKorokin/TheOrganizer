@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TheOrganizer.Model;
 
 namespace TheOrganizer.Services
 {
     public interface INotebookService
     {
-        Notebook AddNotebook(Notebook notebook);
+        bool AddNotebook(Notebook notebook);
 
         bool EditNotebook(Notebook notebook);
 

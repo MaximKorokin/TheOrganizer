@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using TheOrganizer.Entities;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 
@@ -15,7 +11,7 @@ namespace TheOrganizer.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         public UsersController(IUserService userService)
         {
@@ -74,24 +70,24 @@ namespace TheOrganizer.Controllers
         }
 
         [HttpPut("current/change")]
-        public IActionResult ChangeCurrentUser([FromBody] User user)
+        public IActionResult EditCurrentUser([FromBody] User user)
         {
             int id;
             if (!int.TryParse(User.Identity.Name, out id))
                 return NotFound("User not found");
             user.Id = id;
-            if (_userService.ChangeUser(user))
+            if (_userService.EditUser(user))
                 return Ok(user);
             return BadRequest("Something is wrng with user data");
         }
 
         [HttpDelete("current/delete")]
-        public IActionResult DeleteCurrentUser()
+        public IActionResult RemoveCurrentUser()
         {
             int id;
             if (!int.TryParse(User.Identity.Name, out id))
                 return BadRequest("Can not delete");
-            if (_userService.DeleteUser(id))
+            if (_userService.RemoveUser(id))
                 return Ok();
             return NotFound("User not found");
         }

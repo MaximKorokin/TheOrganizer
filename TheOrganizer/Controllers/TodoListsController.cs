@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
@@ -15,7 +10,7 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class TodoListsController : ControllerBase
     {
-        private ITodoListService _todoListService;
+        private readonly ITodoListService _todoListService;
 
         public TodoListsController(ITodoListService todoList)
         {
@@ -27,7 +22,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             todoList.OwnerId = userId;
-            if (_todoListService.AddTodoList(todoList) != null)
+            if (_todoListService.AddTodoList(todoList))
                 return Ok(todoList);
             return BadRequest("There is something wrong with todoList info");
         }
@@ -38,7 +33,7 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             todoList.OwnerId = userId;
             if (_todoListService.EditTodoList(todoList))
-                return Ok();
+                return Ok(todoList);
             return BadRequest("There is something wrong with todoList info");
         }
 

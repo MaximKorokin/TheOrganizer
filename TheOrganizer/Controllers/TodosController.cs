@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
@@ -15,7 +10,8 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class TodosController : ControllerBase
     {
-        private ITodoService _todoService;
+        private readonly ITodoService _todoService;
+
         public TodosController(ITodoService todoService)
         {
             _todoService = todoService;
@@ -35,12 +31,12 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_todoService.EditTodo(todo, userId))
-                return Ok();
+                return Ok(todo);
             return BadRequest("There is something wrong with Todo info");
         }
 
         [HttpDelete("delete/{id}")]
-        public IActionResult DeleteTodo([FromRoute] int id)
+        public IActionResult RemoveTodo([FromRoute] int id)
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_todoService.RemoveTodo(id, userId))

@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 
@@ -15,8 +12,9 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class EventsController : ControllerBase
     {
-        private IEventService _eventService;
-        private ICalendarService _calendarService;
+        private readonly IEventService _eventService;
+        private readonly ICalendarService _calendarService;
+
         public EventsController(IEventService eventService, ICalendarService calendarService)
         {
             _eventService = eventService;
@@ -51,7 +49,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             if (_eventService.EditEvent(e, userId))
-                return Ok();
+                return Ok(e);
             return BadRequest("There is something wrong with event info");
         }
 

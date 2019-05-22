@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TheOrganizer.Model;
 
 namespace TheOrganizer.Services
@@ -14,15 +12,15 @@ namespace TheOrganizer.Services
         {
             _db = db;
         }
-        public TodoList AddTodoList(TodoList todoList)
+        public bool AddTodoList(TodoList todoList)
         {
             if (todoList != null && !string.IsNullOrWhiteSpace(todoList.Title))
             {
                 _db.TodoLists.Add(todoList);
                 _db.SaveChanges();
-                return todoList;
+                return true;
             }
-            return null;
+            return false;
         }
 
         public bool EditTodoList(TodoList todoList)

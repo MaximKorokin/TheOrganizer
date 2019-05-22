@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using TheOrganizer.Entities;
 using TheOrganizer.Helpers;
 using TheOrganizer.Model;
@@ -106,7 +105,7 @@ namespace TheOrganizer.Services
             return user;
         }
 
-        public bool ChangeUser(User newUser)
+        public bool EditUser(User newUser)
         {
             var user = _db.Users.Find(newUser.Id);
             if (user == null || 
@@ -120,7 +119,7 @@ namespace TheOrganizer.Services
             return true;
         }
 
-        public bool DeleteUser(int id)
+        public bool RemoveUser(int id)
         {
             var user = _db.Users.Find(id);
             if (user == null)

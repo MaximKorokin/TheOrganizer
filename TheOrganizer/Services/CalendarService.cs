@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TheOrganizer.Model;
 
 namespace TheOrganizer.Services
@@ -15,15 +13,15 @@ namespace TheOrganizer.Services
             _db = db;
         }
 
-        public Calendar AddCalendar(Calendar calendar)
+        public bool AddCalendar(Calendar calendar)
         {
             if (calendar != null && !string.IsNullOrWhiteSpace(calendar.Title))
             {
                 _db.Calendars.Add(calendar);
                 _db.SaveChanges();
-                return calendar;
+                return true;
             }
-            return null;
+            return false;
         }
 
         public bool EditCalendar(Calendar calendar)

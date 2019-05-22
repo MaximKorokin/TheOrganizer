@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TheOrganizer.Model;
 
 namespace TheOrganizer.Services
@@ -9,19 +7,21 @@ namespace TheOrganizer.Services
     public class NotebookService : INotebookService
     {
         private readonly TheOrganizerDBContext _db;
+
         public NotebookService(TheOrganizerDBContext db)
         {
             _db = db;
         }
-        public Notebook AddNotebook(Notebook notebook)
+
+        public bool AddNotebook(Notebook notebook)
         {
             if (notebook != null && !string.IsNullOrWhiteSpace(notebook.Title))
             {
                 _db.Notebooks.Add(notebook);
                 _db.SaveChanges();
-                return notebook;
+                return true;
             }
-            return null;
+            return false;
         }
 
         public bool EditNotebook(Notebook notebook)

@@ -61,7 +61,7 @@ namespace TheOrganizerTests.ControllersTests
                 Id = 1
             };
 
-            var result = _controller.DeleteTodo(contact.Id) as StatusCodeResult;
+            var result = _controller.RemoveTodo(contact.Id) as StatusCodeResult;
 
             Assert.True(result != null, "result is null");
             Assert.True(result.StatusCode == 200, "Status code is not OK");

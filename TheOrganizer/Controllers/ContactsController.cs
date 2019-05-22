@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
@@ -14,7 +10,8 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class ContactsController : ControllerBase
     {
-        private IContactService _contactService;
+        private readonly IContactService _contactService;
+
         public ContactsController(IContactService contactService)
         {
             _contactService = contactService;
@@ -36,7 +33,7 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             contact.OwnerId = userId;
             if (_contactService.EditContact(contact))
-                return Ok();
+                return Ok(contact);
             return BadRequest("There is something wrong with contact info");
         }
 

@@ -120,7 +120,7 @@ namespace TheOrganizerTests.ControllersTests
             user.Name = "newName";
             user.Password = "newPass";
 
-            var result = _controller.ChangeCurrentUser(user) as ObjectResult;
+            var result = _controller.EditCurrentUser(user) as ObjectResult;
             
             Assert.True(result != null, "result is null");
             Assert.True((result.Value as User).Name == "newName", "Incorrect name of user");
@@ -139,7 +139,7 @@ namespace TheOrganizerTests.ControllersTests
 
             _controller.Authenticate(user);
 
-            var result = _controller.DeleteCurrentUser();
+            var result = _controller.RemoveCurrentUser();
 
             var deletedUser = _userService.GetUserById(user.Id);
 
