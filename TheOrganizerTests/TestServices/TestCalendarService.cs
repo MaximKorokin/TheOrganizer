@@ -1,17 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using TheOrganizer.Controllers;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 
 namespace TheOrganizerTests.TestServices
 {
-    internal class TestCalendarService
+    internal class TestCalendarService : ICalendarService
     {
         private List<User> Users { get; set; } = new List<User>
         {
@@ -70,7 +68,7 @@ namespace TheOrganizerTests.TestServices
             set
             {
                 _controller = value;
-                //Authenticate();
+                Authenticate();
             }
         }
 
@@ -79,80 +77,80 @@ namespace TheOrganizerTests.TestServices
 
 
 
-        //public Calendar AddCalendar(Calendar calendar)
-        //{
-        //    if (calendar == null)
-        //        return false;
+        public bool AddCalendar(Calendar calendar)
+        {
+            if (calendar == null)
+                return false;
 
-        //    try
-        //    {
-        //        ToDos.Add(toDo);
-        //    }
-        //    catch
-        //    {
-        //        return false;
-        //    }
+            try
+            {
+                Calendars.Add(calendar);
+            }
+            catch
+            {
+                return false;
+            }
 
-        //    return true;
-        //}
+            return true;
+        }
 
-        //public bool EditCalendar(Calendar calendar)
-        //{
-        //    if (toDo == null)
-        //        return false;
+        public bool EditCalendar(Calendar calendar)
+        {
+            if (calendar == null)
+                return false;
 
-        //    var cur = ToDos.FirstOrDefault(t => t.Id == toDo.Id);
+            var cur = Calendars.FirstOrDefault(c => c.Id == calendar.Id);
 
-        //    if (cur == null)
-        //        return false;
+            if (cur == null)
+                return false;
 
-        //    return true;
-        //}
+            return true;
+        }
 
-        //public Calendar GetCalendar(int calendarId, int ownerId)
-        //{
-        //    return ToDos.FirstOrDefault(t => t.TodoList.OwnerId == ownerId && t.Id == toDoId);
-        //}
+        public Calendar GetCalendar(int calendarId, int ownerId)
+        {
+            return Calendars.FirstOrDefault(c => c.OwnerId == ownerId && c.Id == calendarId);
+        }
 
-        //public IEnumerable<Calendar> GetCalendars(int ownerId)
-        //{
-        //    return ToDos.Where(t => t.TodoList.OwnerId == ownerId && t.TodoListId == toDoListId).ToList();
-        //}
+        public IEnumerable<Calendar> GetCalendars(int ownerId)
+        {
+            return Calendars.Where(c => c.OwnerId == ownerId).ToList();
+        }
 
-        //public bool RemoveCalendar(int calendarId, int ownerId)
-        //{
-        //    var deleted = ToDos.Remove(ToDos.FirstOrDefault(t => t.Id == toDoId));
+        public bool RemoveCalendar(int calendarId, int ownerId)
+        {
+            var deleted = Calendars.Remove(Calendars.FirstOrDefault(c => c.Id == calendarId));
 
-        //    return deleted;
-        //}
-
-
+            return deleted;
+        }
 
 
 
 
-        //private readonly User userForAuth = new User
-        //{
-        //    Id = 1,
-        //    Name = "Name1",
-        //    Email = "Email1",
-        //    Password = "Password1",
-        //};
 
-        //private void Authenticate()
-        //{
-        //    var user = Users.FirstOrDefault(x => x.Email == userForAuth.Email && x.Password == userForAuth.Password);
 
-        //    Controller.ControllerContext = new ControllerContext
-        //    {
-        //        HttpContext = new DefaultHttpContext
-        //        {
-        //            User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-        //            {
-        //                new Claim(ClaimTypes.Name, "1")
-        //            }, "someAuthTypeName")),
-        //        }
-        //    };
-        //}
+        private readonly User userForAuth = new User
+        {
+            Id = 1,
+            Name = "Name1",
+            Email = "Email1",
+            Password = "Password1",
+        };
+
+        private void Authenticate()
+        {
+            var user = Users.FirstOrDefault(x => x.Email == userForAuth.Email && x.Password == userForAuth.Password);
+
+            Controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.Name, "1")
+                    }, "someAuthTypeName")),
+                }
+            };
+        }
     }
 }

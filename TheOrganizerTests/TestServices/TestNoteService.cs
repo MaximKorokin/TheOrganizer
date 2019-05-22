@@ -9,7 +9,7 @@ using TheOrganizer.Services;
 
 namespace TheOrganizerTests.TestServices
 {
-    internal class TestContactService : IContactService
+    class TestNoteService : INoteService
     {
         private List<User> Users { get; set; } = new List<User>
         {
@@ -35,37 +35,46 @@ namespace TheOrganizerTests.TestServices
                 Password = "Password3",
             },
         };
-        private List<Contact> Contacts { get; set; } = new List<Contact>
+        private List<Note> Notes { get; set; } = new List<Note>
         {
-            new Contact
+            new Note
             {
                 Id = 1,
-                Name = "Name1",
-                Email = "Email1",
-                PhoneNumber = "Number1",
-                OwnerId = 1,
+                Title = "Title1",
+                Text = "Text1",
+                NotebookId = 1,
+                Notebook = new Notebook
+                {
+                    OwnerId = 1
+                }
             },
-            new Contact
+            new Note
             {
                 Id = 2,
-                Name = "Name2",
-                Email = "Email2",
-                PhoneNumber = "Number2",
-                OwnerId = 1,
+                Title = "Title2",
+                Text = "Text2",
+                NotebookId = 1,
+                Notebook = new Notebook
+                {
+                    OwnerId = 1
+                }
             },
-            new Contact
+            new Note
             {
                 Id = 3,
-                Name = "Name3",
-                Email = "Email3",
-                PhoneNumber = "Number3",
-                OwnerId = 2,
+                Title = "Title3",
+                Text = "Text3",
+                NotebookId = 2,
+                Notebook = new Notebook
+                {
+                    OwnerId = 2
+                }
             },
         };
 
-        private ContactsController _controller;
+        private NotesController _controller;
 
-        public ContactsController Controller
+        public NotesController Controller
         {
             get
             {
@@ -80,15 +89,14 @@ namespace TheOrganizerTests.TestServices
 
 
 
-
-        public bool AddContact(Contact contact)
+        public bool AddNote(Note note, int ownerId)
         {
-            if (contact == null)
+            if (note == null)
                 return false;
 
             try
             {
-                Contacts.Add(contact);
+                Notes.Add(note);
             }
             catch
             {
@@ -98,12 +106,12 @@ namespace TheOrganizerTests.TestServices
             return true;
         }
 
-        public bool EditContact(Contact contact)
+        public bool EditNote(Note note, int ownerId)
         {
-            if (contact == null)
+            if (note == null)
                 return false;
 
-            var cur = Contacts.FirstOrDefault(c => c.Id == contact.Id);
+            var cur = Notes.FirstOrDefault(n => n.Id == note.Id);
 
             if (cur == null)
                 return false;
@@ -111,16 +119,21 @@ namespace TheOrganizerTests.TestServices
             return true;
         }
 
-        public bool RemoveContact(int contactId, int ownerId)
+        public bool RemoveNote(int noteId, int ownerId)
         {
-            var deleted = Contacts.Remove(Contacts.FirstOrDefault(c => c.Id == contactId));
+            var deleted = Notes.Remove(Notes.FirstOrDefault(n => n.Id == noteId));
 
             return deleted;
         }
 
-        public IEnumerable<Contact> GetContacts(int ownerId)
+        public IEnumerable<Note> GetNotes(int notebookId, int ownerId)
         {
-            return Contacts.Where(c => c.OwnerId == ownerId).ToList();
+            return Notes.Where(n => n.Notebook.OwnerId == ownerId && n.NotebookId == notebookId).ToList();
+        }
+
+        public Note GetNote(int noteId, int ownerId)
+        {
+            return Notes.FirstOrDefault(n => n.Notebook.OwnerId == ownerId && n.Id == noteId);
         }
 
 

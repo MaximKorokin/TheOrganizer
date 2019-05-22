@@ -1,18 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Moq;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
-using System.Threading;
 using TheOrganizer.Controllers;
 using TheOrganizer.Entities;
-using TheOrganizer.Helpers;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 using TheOrganizerTests.TestServices;
@@ -106,7 +95,7 @@ namespace TheOrganizerTests.ControllersTests
         }
 
         [Fact]
-        public void ChangeCurrentUser()
+        public void EditCurrentUser()
         {
             var user = new User
             {
@@ -128,7 +117,7 @@ namespace TheOrganizerTests.ControllersTests
         }
 
         [Fact]
-        public void DeleteCurrentUser()
+        public void RemoveCurrentUser()
         {
             var user = new User
             {

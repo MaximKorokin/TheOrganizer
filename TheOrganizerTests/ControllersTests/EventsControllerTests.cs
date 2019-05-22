@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using TheOrganizer.Controllers;
-using TheOrganizer.Entities;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 using TheOrganizerTests.TestServices;
@@ -50,9 +47,10 @@ namespace TheOrganizerTests.ControllersTests
                 Title = "NewTitle",
             };
 
-            var result = _controller.EditEvent(ev) as StatusCodeResult;
+            var result = _controller.EditEvent(ev) as ObjectResult;
 
             Assert.True(result != null, "result is null");
+            Assert.True(((Event)result.Value).Title == "NewTitle", "Title is not NewTitle");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
         }
 
