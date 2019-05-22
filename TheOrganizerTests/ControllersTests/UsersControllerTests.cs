@@ -1,18 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Moq;
-using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
-using System.Threading;
 using TheOrganizer.Controllers;
 using TheOrganizer.Entities;
-using TheOrganizer.Helpers;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 using TheOrganizerTests.TestServices;
@@ -106,7 +95,7 @@ namespace TheOrganizerTests.ControllersTests
         }
 
         [Fact]
-        public void ChangeCurrentUser()
+        public void EditCurrentUser()
         {
             var user = new User
             {
@@ -120,7 +109,7 @@ namespace TheOrganizerTests.ControllersTests
             user.Name = "newName";
             user.Password = "newPass";
 
-            var result = _controller.ChangeCurrentUser(user) as ObjectResult;
+            var result = _controller.EditCurrentUser(user) as ObjectResult;
             
             Assert.True(result != null, "result is null");
             Assert.True((result.Value as User).Name == "newName", "Incorrect name of user");
@@ -128,7 +117,7 @@ namespace TheOrganizerTests.ControllersTests
         }
 
         [Fact]
-        public void DeleteCurrentUser()
+        public void RemoveCurrentUser()
         {
             var user = new User
             {
@@ -139,7 +128,7 @@ namespace TheOrganizerTests.ControllersTests
 
             _controller.Authenticate(user);
 
-            var result = _controller.DeleteCurrentUser();
+            var result = _controller.RemoveCurrentUser();
 
             var deletedUser = _userService.GetUserById(user.Id);
 

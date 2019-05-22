@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using TheOrganizer.Controllers;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
@@ -27,13 +25,14 @@ namespace TheOrganizerTests.ControllersTests
         {
             var contact = new Todo()
             {
-                Text = "Text",
+                Text = "Text123",
                 TodoListId = 1,
             };
 
             var result = _controller.AddTodo(contact) as ObjectResult;
 
-            Assert.True(result != null, "result is null");
+            Assert.True(result.Value != null, "result is null");
+            Assert.True(((Calendar)result.Value).Title == "Title123", "Text is not Text123");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
         }
 
@@ -54,7 +53,7 @@ namespace TheOrganizerTests.ControllersTests
         }
 
         [Fact]
-        public void DeleteTodo()
+        public void RemoveTodo()
         {
             var contact = new Todo()
             {

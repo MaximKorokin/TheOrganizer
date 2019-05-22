@@ -106,7 +106,7 @@ namespace TheOrganizer.Services
             return user;
         }
 
-        public bool ChangeUser(User newUser)
+        public bool EditUser(User newUser)
         {
             var user = _db.Users.Find(newUser.Id);
             if (user == null || 
@@ -120,7 +120,7 @@ namespace TheOrganizer.Services
             return true;
         }
 
-        public bool DeleteUser(int id)
+        public bool RemoveUser(int id)
         {
             var user = _db.Users.Find(id);
             if (user == null)

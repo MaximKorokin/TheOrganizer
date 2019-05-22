@@ -14,7 +14,7 @@ namespace TheOrganizer.Services
         User GetByEmail(string email);
         bool AddUser(User user);
         User GetUserById(int id);
-        bool ChangeUser(User user);
-        bool DeleteUser(int id);
+        bool EditUser(User user);
+        bool RemoveUser(int id);
     }
 }

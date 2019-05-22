@@ -1,18 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
-using System.Text;
-using System.Threading;
 using TheOrganizer.Controllers;
 using TheOrganizer.Entities;
-using TheOrganizer.Helpers;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 
@@ -87,7 +79,7 @@ namespace TheOrganizerTests.TestServices
             return userEntity;
         }
 
-        public bool ChangeUser(User newUser)
+        public bool EditUser(User newUser)
         {
             var user = Users.FirstOrDefault(u => u.Id == newUser.Id);
 
@@ -101,7 +93,7 @@ namespace TheOrganizerTests.TestServices
             return true;
         }
 
-        public bool DeleteUser(int id)
+        public bool RemoveUser(int id)
         {
             var user = Users.FirstOrDefault(u => u.Id == id);
 
