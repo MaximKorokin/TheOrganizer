@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 
@@ -14,7 +10,7 @@ namespace TheOrganizer.Controllers
     [ApiController]
     public class CalendarsController : Controller
     {
-        private ICalendarService _eventService;
+        private readonly ICalendarService _eventService;
 
         public CalendarsController(ICalendarService eventService)
         {
@@ -26,7 +22,7 @@ namespace TheOrganizer.Controllers
         {
             int.TryParse(User.Identity.Name, out int userId);
             calendar.OwnerId = userId;
-            if (_eventService.AddCalendar(calendar) != null)
+            if (_eventService.AddCalendar(calendar))
                 return Ok(calendar);
             return BadRequest("There is something wrong with calendar info");
         }
@@ -37,7 +33,7 @@ namespace TheOrganizer.Controllers
             int.TryParse(User.Identity.Name, out int userId);
             calendar.OwnerId = userId;
             if (_eventService.EditCalendar(calendar))
-                return Ok();
+                return Ok(calendar);
             return BadRequest("There is something wrong with calendar info");
         }
 

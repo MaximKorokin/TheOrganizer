@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TheOrganizer.Model;
 
 namespace TheOrganizer.Services
 {
     public interface ICalendarService
     {
-        Calendar AddCalendar(Calendar calendar);
+        bool AddCalendar(Calendar calendar);
 
         bool EditCalendar(Calendar calendar);
 
