@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using TheOrganizer.Controllers;
-using TheOrganizer.Entities;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 using TheOrganizerTests.TestServices;
