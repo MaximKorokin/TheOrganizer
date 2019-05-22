@@ -45,9 +45,10 @@ namespace TheOrganizerTests.ControllersTests
                 Title = "Title1"
             };
 
-            var result = _controller.EditCalendar(calendar) as StatusCodeResult;
+            var result = _controller.EditCalendar(calendar) as ObjectResult;
 
-            Assert.True(result != null, "result is null");
+            Assert.True(result.Value != null, "result is null");
+            Assert.True(((Calendar)result.Value).Title == "Title1", "result is not Title1");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
         }
 
@@ -72,7 +73,7 @@ namespace TheOrganizerTests.ControllersTests
 
             Assert.True(result != null, "result is null");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
-            Assert.True((result.Value as List<Todo>).Count == 2, "TaDos quantity is not correct");
+            Assert.True((result.Value as List<Calendar>).Count == 2, "Calendars quantity is not correct");
         }
 
         [Fact]
@@ -84,7 +85,7 @@ namespace TheOrganizerTests.ControllersTests
 
             Assert.True(result != null, "result is null");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
-            Assert.True((result.Value as Todo).Text == "Text1", "Seleted toDo's text is not correct");
+            Assert.True((result.Value as Calendar).Title == "Title1", "Seleted calendar's title is not correct");
         }
     }
 }

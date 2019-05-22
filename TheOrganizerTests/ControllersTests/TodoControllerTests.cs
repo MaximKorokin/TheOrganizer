@@ -23,32 +23,33 @@ namespace TheOrganizerTests.ControllersTests
         [Fact]
         public void AddTodo()
         {
-            var contact = new Todo()
+            var todo = new Todo()
             {
                 Text = "Text123",
                 TodoListId = 1,
             };
 
-            var result = _controller.AddTodo(contact) as ObjectResult;
+            var result = _controller.AddTodo(todo) as ObjectResult;
 
             Assert.True(result.Value != null, "result is null");
-            Assert.True(((Calendar)result.Value).Title == "Title123", "Text is not Text123");
+            Assert.True(((Todo)result.Value).Text == "Text123", "Text is not Text123");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
         }
 
         [Fact]
         public void EditTodo()
         {
-            var contact = new Todo()
+            var todo = new Todo()
             {
                 Id = 1,
-                Text = "Text",
+                Text = "Text123",
                 TodoListId = 1,
             };
 
-            var result = _controller.EditTodo(contact) as StatusCodeResult;
+            var result = _controller.EditTodo(todo) as ObjectResult;
 
             Assert.True(result != null, "result is null");
+            Assert.True(((Todo)result.Value).Text == "Text123", "Text is not Text123");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
         }
 

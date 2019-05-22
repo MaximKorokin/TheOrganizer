@@ -43,13 +43,14 @@ namespace TheOrganizerTests.ControllersTests
             var contact = new Contact()
             {
                 Id = 2,
-                Name = "Name",
+                Name = "Name123",
                 Email = "Email",
             };
 
-            var result = _controller.EditContact(contact) as StatusCodeResult;
+            var result = _controller.EditContact(contact) as ObjectResult;
 
-            Assert.True(result != null, "result is null");
+            Assert.True(result.Value != null, "result is null");
+            Assert.True(((Contact)result.Value).Name == "Name123", "Name is not Name123");
             Assert.True(result.StatusCode == 200, "Status code is not OK");
         }
 

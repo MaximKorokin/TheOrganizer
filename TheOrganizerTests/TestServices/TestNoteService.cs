@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using TheOrganizer.Controllers;
 using TheOrganizer.Model;
 using TheOrganizer.Services;
 
 namespace TheOrganizerTests.TestServices
 {
-    internal class TestCalendarService : ICalendarService
+    class TestNoteService : INoteService
     {
         private List<User> Users { get; set; } = new List<User>
         {
@@ -35,31 +37,46 @@ namespace TheOrganizerTests.TestServices
                 Password = "Password3",
             },
         };
-        private List<Calendar> Calendars { get; set; } = new List<Calendar>
+        private List<Note> Notes { get; set; } = new List<Note>
         {
-            new Calendar
+            new Note
             {
                 Id = 1,
                 Title = "Title1",
-                OwnerId = 1,
+                Text = "Text1",
+                NotebookId = 1,
+                Notebook = new Notebook
+                {
+                    OwnerId = 1
+                }
             },
-            new Calendar
+            new Note
             {
                 Id = 2,
-                Title = "Title1",
-                OwnerId = 1,
+                Title = "Title2",
+                Text = "Text2",
+                NotebookId = 1,
+                Notebook = new Notebook
+                {
+                    OwnerId = 1
+                }
             },
-            new Calendar
+            new Note
             {
                 Id = 3,
-                Title = "Title1",
-                OwnerId = 2,
+                Title = "Title3",
+                Text = "Text3",
+                NotebookId = 2,
+                Notebook = new Notebook
+                {
+                    OwnerId = 2
+                }
             },
         };
 
-        private CalendarsController _controller;
+        private NotesController _controller;
 
-        public CalendarsController Controller
+        public NotesController Controller
         {
             get
             {
@@ -74,17 +91,14 @@ namespace TheOrganizerTests.TestServices
 
 
 
-
-
-
-        public bool AddCalendar(Calendar calendar)
+        public bool AddNote(Note note, int ownerId)
         {
-            if (calendar == null)
+            if (note == null)
                 return false;
 
             try
             {
-                Calendars.Add(calendar);
+                Notes.Add(note);
             }
             catch
             {
@@ -94,12 +108,12 @@ namespace TheOrganizerTests.TestServices
             return true;
         }
 
-        public bool EditCalendar(Calendar calendar)
+        public bool EditNote(Note note, int ownerId)
         {
-            if (calendar == null)
+            if (note == null)
                 return false;
 
-            var cur = Calendars.FirstOrDefault(c => c.Id == calendar.Id);
+            var cur = Notes.FirstOrDefault(n => n.Id == note.Id);
 
             if (cur == null)
                 return false;
@@ -107,24 +121,22 @@ namespace TheOrganizerTests.TestServices
             return true;
         }
 
-        public Calendar GetCalendar(int calendarId, int ownerId)
+        public bool RemoveNote(int noteId, int ownerId)
         {
-            return Calendars.FirstOrDefault(c => c.OwnerId == ownerId && c.Id == calendarId);
-        }
-
-        public IEnumerable<Calendar> GetCalendars(int ownerId)
-        {
-            return Calendars.Where(c => c.OwnerId == ownerId).ToList();
-        }
-
-        public bool RemoveCalendar(int calendarId, int ownerId)
-        {
-            var deleted = Calendars.Remove(Calendars.FirstOrDefault(c => c.Id == calendarId));
+            var deleted = Notes.Remove(Notes.FirstOrDefault(n => n.Id == noteId));
 
             return deleted;
         }
 
+        public IEnumerable<Note> GetNotes(int notebookId, int ownerId)
+        {
+            return Notes.Where(n => n.Notebook.OwnerId == ownerId && n.NotebookId == notebookId).ToList();
+        }
 
+        public Note GetNote(int noteId, int ownerId)
+        {
+            return Notes.FirstOrDefault(n => n.Notebook.OwnerId == ownerId && n.Id == noteId);
+        }
 
 
 
